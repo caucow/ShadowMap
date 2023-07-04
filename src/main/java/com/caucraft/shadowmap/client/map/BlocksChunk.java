@@ -175,9 +175,15 @@ public class BlocksChunk extends MapChunk<BlocksNbtContext> {
             long curTimeMs) {
         boolean changed = false;
 
-        ChunkSection topNonEmptySection = chunk.getHighestNonEmptySection();
+        int topSectionIndex = chunk.getHighestNonEmptySection();
         int bottomY = world.getBottomY();
-        int topY = topNonEmptySection == null ? bottomY - 1 : topNonEmptySection.getYOffset() + 16;
+        int topY;
+        if (topSectionIndex == -1) {
+            topY = bottomY - 1;
+        } else {
+            ChunkSection topNonEmptySection = chunk.getSection(topSectionIndex);
+            topY = topNonEmptySection == null ? bottomY - 1 : bottomY + (topSectionIndex << 4) + 16;
+        }
 
         ChunkPos chunkPos = chunk.getPos();
         for (int localZ = 0; localZ < 16; localZ++) {
@@ -235,9 +241,15 @@ public class BlocksChunk extends MapChunk<BlocksNbtContext> {
     @Override
     public boolean updateBlock(World world, Chunk chunk, ChunkCache chunkCache, CeilingType ceilingType, BlockPos pos,
             BlockState state, long curTimeMs) {
-        ChunkSection topNonEmptySection = chunk.getHighestNonEmptySection();
+        int topSectionIndex = chunk.getHighestNonEmptySection();
         int bottomY = world.getBottomY();
-        int topY = topNonEmptySection == null ? bottomY - 1 : topNonEmptySection.getYOffset() + 16;
+        int topY;
+        if (topSectionIndex == -1) {
+            topY = bottomY - 1;
+        } else {
+            ChunkSection topNonEmptySection = chunk.getSection(topSectionIndex);
+            topY = topNonEmptySection == null ? bottomY - 1 : bottomY + (topSectionIndex << 4) + 16;
+        }
 
         return update(world, chunk, chunkCache, ceilingType, pos.getX(), pos.getZ(), bottomY, topY, new BlockPos.Mutable(), new BlockPos.Mutable());
     }

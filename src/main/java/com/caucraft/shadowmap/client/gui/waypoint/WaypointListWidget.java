@@ -14,6 +14,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GameRenderer;
@@ -225,9 +226,10 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        MatrixStack matrices = context.getMatrices();
         description = null;
-        super.render(matrices, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
         RenderSystem.enableDepthTest();
         RenderSystem.depthMask(true);
         Tessellator tess = Tessellator.getInstance();
@@ -419,7 +421,7 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
         }
 
         @Override
-        public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
+        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
                 int mouseY, boolean hovered, float tickDelta) {
             entryWidth = getRowWidth() - 4;
             RenderSystem.enableDepthTest();
@@ -427,8 +429,8 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
             RenderSystem.defaultBlendFunc();
             int indent = (depth * 8) + 2;
             renderColorSquareAndGroup(x, y, entryWidth, entryHeight, indent, hovered);
-            renderName(matrices, x, y, entryWidth, entryHeight, indent);
-            renderButtonIcons(matrices, x, y, entryWidth, hovered, mouseX);
+            renderName(context, x, y, entryWidth, entryHeight, indent);
+            renderButtonIcons(context, x, y, entryWidth, hovered, mouseX);
         }
 
         private void renderColorSquareAndGroup(int x, int y, int entryWidth, int entryHeight, int indent, boolean hovered) {
@@ -478,7 +480,8 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
             tess.draw();
         }
 
-        private void renderName(MatrixStack matrices, int x, int y, int entryWidth, int entryHeight, int indent) {
+        private void renderName(DrawContext context, int x, int y, int entryWidth, int entryHeight, int indent) {
+            MatrixStack matrices = context.getMatrices();
             int color = 0xfefefe;
             if (!waypoint.isVisible()) {
                 color >>>= 1;
@@ -494,7 +497,7 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
             TextHelper.get(matrices).color(0xFF000000 | color).draw(name, x + entryHeight + indent + 27, y + 3);
         }
 
-        private void renderButtonIcons(MatrixStack matrices, int x, int y, int entryWidth, boolean hovered, int mouseX) {
+        private void renderButtonIcons(DrawContext drawContext, int x, int y, int entryWidth, boolean hovered, int mouseX) {
             /*
             Controls:
                 Waypoint:

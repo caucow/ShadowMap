@@ -7,6 +7,7 @@ import com.caucraft.shadowmap.client.importer.ImportTask;
 import com.caucraft.shadowmap.client.util.TextHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -124,12 +125,13 @@ public class ImportListWidget extends AlwaysSelectedEntryListWidget<ImportListWi
         }
 
         @Override
-        public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
+        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
                 int mouseY, boolean hovered, float tickDelta) {
+            MatrixStack matrices = context.getMatrices();
             matrices.push();
             matrices.translate(x, y, 0);
             for (ClickableWidget widget : childListBecauseINeedToMakeItMyself) {
-                widget.render(matrices, mouseX - x, mouseY - y, tickDelta);
+                widget.render(context, mouseX - x, mouseY - y, tickDelta);
             }
             matrices.pop();
         }
@@ -201,9 +203,10 @@ public class ImportListWidget extends AlwaysSelectedEntryListWidget<ImportListWi
         }
 
         @Override
-        public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
+        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
                 int mouseY, boolean hovered, float tickDelta) {
-            super.render(matrices, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
+            MatrixStack matrices = context.getMatrices();
+            super.render(context, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
             matrices.push();
             matrices.translate(x, y, 0);
             TextHelper textHelper = TextHelper.get(matrices).immediate(false);

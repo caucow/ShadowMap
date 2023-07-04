@@ -2,6 +2,7 @@ package com.caucraft.shadowmap.client.gui.component;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -138,8 +139,8 @@ public class RecustomTextFieldWidget extends TextFieldWidget {
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
         RenderSystem.enableDepthTest();
-        super.renderButton(matrices, mouseX, mouseY, delta);
+        super.renderButton(context, mouseX, mouseY, delta);
     }
 }

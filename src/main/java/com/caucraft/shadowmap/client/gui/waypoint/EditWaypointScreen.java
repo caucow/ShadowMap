@@ -19,6 +19,7 @@ import com.caucraft.shadowmap.client.waypoint.WaypointGroup;
 import com.caucraft.shadowmap.client.waypoint.WorldWaypointManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -549,9 +550,9 @@ public class EditWaypointScreen extends LessPoopScreen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float tickDelta) {
-        renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, tickDelta);
+    public void render(DrawContext context, int mouseX, int mouseY, float tickDelta) {
+        renderBackground(context);
+        super.render(context, mouseX, mouseY, tickDelta);
     }
 
     private static int getRandomColor() {

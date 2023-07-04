@@ -2,6 +2,7 @@ package com.caucraft.shadowmap.client.gui.component;
 
 import com.caucraft.shadowmap.client.util.TextHelper;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.BufferBuilder;
@@ -140,8 +141,9 @@ public class ConfirmDialogWidget extends FullscreenWidget {
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        super.renderButton(matrices, mouseX, mouseY, delta);
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        MatrixStack matrices = context.getMatrices();
+        super.renderButton(context, mouseX, mouseY, delta);
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder buffer = tess.getBuffer();
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
@@ -164,7 +166,7 @@ public class ConfirmDialogWidget extends FullscreenWidget {
         }
         textHelper.flushBuffers();
         for (ButtonWidget widget : buttons) {
-            widget.render(matrices, mouseX, mouseY, delta);
+            widget.render(context, mouseX, mouseY, delta);
         }
     }
 

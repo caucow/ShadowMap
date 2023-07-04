@@ -26,11 +26,13 @@ import com.caucraft.shadowmap.client.util.MapFramebuffer;
 import com.caucraft.shadowmap.client.util.MapUtils;
 import com.caucraft.shadowmap.client.util.TextHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.systems.VertexSorter;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -382,11 +384,12 @@ public class MapScreen extends MapScreenApi {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        renderBackground(matrices);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        MatrixStack matrices = context.getMatrices();
+        renderBackground(context);
 
         if (map == null) {
-            super.render(matrices, mouseX, mouseY, delta);
+            super.render(context, mouseX, mouseY, delta);
             return;
         }
 
@@ -396,24 +399,25 @@ public class MapScreen extends MapScreenApi {
             int windowWidth = client.getWindow().getFramebufferWidth();
             int windowHeight = client.getWindow().getFramebufferHeight();
             float uiScale = (float) client.getWindow().getScaleFactor();
-            RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0.0F, windowWidth, windowHeight, 0.0F, -1000.0F, 1000.0F));
+            RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0.0F, windowWidth, windowHeight, 0.0F, -1000.0F, 1000.0F), VertexSorter.BY_Z);
             modelStack.push();
             modelStack.loadIdentity();
             RenderSystem.applyModelViewMatrix();
             matrices.push();
             matrices.scale(uiScale, uiScale, 1.0F);
-            renderInternal(matrices, mouseX, mouseY, delta);
+            renderInternal(context, mouseX, mouseY, delta);
         } finally {
             matrices.pop();
             modelStack.pop();
-            RenderSystem.setProjectionMatrix(sysProjMatrix);
+            RenderSystem.setProjectionMatrix(sysProjMatrix, VertexSorter.BY_Z);
             RenderSystem.applyModelViewMatrix();
         }
 
-        super.render(matrices, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
     }
 
-    private void renderInternal(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    private void renderInternal(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+        MatrixStack matrices = drawContext.getMatrices();
         MapScreenConfig config = shadowMap.getConfig().mapScreenConfig;
         int windowWidth = client.getWindow().getFramebufferWidth();
         int windowHeight = client.getWindow().getFramebufferHeight();

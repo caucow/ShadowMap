@@ -16,10 +16,10 @@ import com.caucraft.shadowmap.client.util.MapFramebuffer;
 import com.caucraft.shadowmap.client.util.TextHelper;
 import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.systems.VertexSorter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.SimpleFramebuffer;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MinimapHud extends DrawableHelper {
+public class MinimapHud {
     private static final int ANGLE_INCREMENT;
     private static final int CIRCLE_POINTS;
     private static final float[] COS_LOOKUP;
@@ -240,7 +240,7 @@ public class MinimapHud extends DrawableHelper {
 
         // Set up for minimap framebuffer render
         Matrix4f newMatrix = new Matrix4f().setOrtho(0.0f, diameter, diameter, 0.0f, -1000.0f, 1000.0f);
-        RenderSystem.setProjectionMatrix(newMatrix);
+        RenderSystem.setProjectionMatrix(newMatrix, VertexSorter.BY_Z);
         minimapFramebuffer.beginWrite(true);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -320,7 +320,7 @@ public class MinimapHud extends DrawableHelper {
         }
         context = builder.getContext();
         newMatrix.setOrtho(0.0f, windowWidth, windowHeight, 0.0f, -1000.0f, 1000.0f);
-        RenderSystem.setProjectionMatrix(newMatrix);
+        RenderSystem.setProjectionMatrix(newMatrix, VertexSorter.BY_Z);
 
         // Draw master texture
         client.getFramebuffer().beginWrite(true);
@@ -372,7 +372,7 @@ public class MinimapHud extends DrawableHelper {
             }
         }
 
-        RenderSystem.setProjectionMatrix(originalMatrix);
+        RenderSystem.setProjectionMatrix(originalMatrix, VertexSorter.BY_Z);
     }
 
     private void drawGrid(MapRenderContext context) {

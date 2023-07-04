@@ -4,6 +4,7 @@ import com.caucraft.shadowmap.client.util.TextHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GameRenderer;
@@ -61,9 +62,10 @@ public class RecustomIconButtonWidget extends ButtonWidget {
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        MatrixStack matrices = context.getMatrices();
         RenderSystem.enableDepthTest();
-        super.renderButton(matrices, mouseX, mouseY, delta);
+        super.renderButton(context, mouseX, mouseY, delta);
         RenderSystem.enableDepthTest();
         TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
         String text = getDisplayText();

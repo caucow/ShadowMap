@@ -3,6 +3,7 @@ package com.caucraft.shadowmap.client.gui.component;
 import com.caucraft.shadowmap.api.ui.MapRenderContext;
 import com.caucraft.shadowmap.client.util.MapUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.render.BufferBuilder;
@@ -133,7 +134,7 @@ public class ColorSelectWidget extends ClickableWidget {
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
         int x = getX();
         int y = getY();
 

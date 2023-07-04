@@ -6,6 +6,7 @@ import com.caucraft.shadowmap.client.gui.waypoint.WaypointSelectScreen;
 import com.caucraft.shadowmap.client.util.TextHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -190,8 +191,9 @@ public class GotoWidget extends FullscreenWidget {
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        super.renderButton(matrices, mouseX, mouseY, delta);
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderButton(context, mouseX, mouseY, delta);
+        MatrixStack matrices = context.getMatrices();
         matrices.push();
         matrices.translate(0, 0, 900);
         int x1 = getX() + width / 2;
@@ -199,10 +201,10 @@ public class GotoWidget extends FullscreenWidget {
         TextHelper textHelper = TextHelper.get(matrices);
         textHelper.drawCentered(this.getMessage(), x1, y1);
         for (ButtonWidget widget : buttons) {
-            widget.render(matrices, mouseX, mouseY, delta);
+            widget.render(context, mouseX, mouseY, delta);
         }
         for (RecustomTextFieldWidget widget : textFields) {
-            widget.render(matrices, mouseX, mouseY, delta);
+            widget.render(context, mouseX, mouseY, delta);
         }
         matrices.pop();
     }

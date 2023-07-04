@@ -32,6 +32,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.systems.VertexSorter;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -50,6 +51,7 @@ import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.CommandRegistryAccess;
@@ -401,7 +403,8 @@ public class ShadowMap implements ClientModInitializer, MapApi {
         }
     }
 
-    private void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    private void onHudRender(DrawContext context, float tickDelta) {
+        MatrixStack matrixStack = context.getMatrices();
         MinecraftClient client = MinecraftClient.getInstance();
         Matrix4f oldProjectionMatrix = RenderSystem.getProjectionMatrix();
         Matrix4f oneToOneProjection = new Matrix4f().setOrtho(0.0f, client.getFramebuffer().viewportWidth, client.getFramebuffer().viewportHeight, 0.0f, -1000.0f, 1000.0f);
@@ -423,7 +426,7 @@ public class ShadowMap implements ClientModInitializer, MapApi {
             TextHelper.get(matrixStack).drawRightAlign(taskState, client.getWindow().getScaledWidth(), client.getWindow().getScaledHeight());
         }
 
-        RenderSystem.setProjectionMatrix(oneToOneProjection);
+        RenderSystem.setProjectionMatrix(oneToOneProjection, VertexSorter.BY_Z);
         matrixStack = RenderSystem.getModelViewStack();
         matrixStack.push();
         matrixStack.loadIdentity();
@@ -439,7 +442,7 @@ public class ShadowMap implements ClientModInitializer, MapApi {
 
         matrixStack.pop();
         RenderSystem.applyModelViewMatrix();
-        RenderSystem.setProjectionMatrix(oldProjectionMatrix);
+        RenderSystem.setProjectionMatrix(oldProjectionMatrix, VertexSorter.BY_Z);
 
         if (config.infoConfig.enabled.get()) {
             minimap.drawInfoHud();

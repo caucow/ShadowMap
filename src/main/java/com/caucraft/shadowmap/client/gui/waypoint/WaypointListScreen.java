@@ -8,6 +8,7 @@ import com.caucraft.shadowmap.client.gui.component.RecustomIconButtonWidget;
 import com.caucraft.shadowmap.client.map.MapWorldImpl;
 import com.caucraft.shadowmap.client.waypoint.WorldWaypointManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -94,9 +95,9 @@ public class WaypointListScreen extends LessPoopScreen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float tickDelta) {
-        renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, tickDelta);
+    public void render(DrawContext context, int mouseX, int mouseY, float tickDelta) {
+        renderBackground(context);
+        super.render(context, mouseX, mouseY, tickDelta);
     }
 
     private void addWaypoint(boolean isGroup, boolean addToSelected) {

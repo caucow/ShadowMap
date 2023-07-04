@@ -4,6 +4,7 @@ import com.caucraft.shadowmap.client.ShadowMap;
 import com.caucraft.shadowmap.client.gui.component.RecustomIconButtonWidget;
 import com.caucraft.shadowmap.client.util.TextHelper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -92,9 +93,9 @@ public class ImportsScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, delta);
-        TextHelper.get(textRenderer, matrices).drawCentered(title, width / 2, 10);
+    public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+        renderBackground(drawContext);
+        super.render(drawContext, mouseX, mouseY, delta);
+        TextHelper.get(textRenderer, drawContext.getMatrices()).drawCentered(title, width / 2, 10);
     }
 }
