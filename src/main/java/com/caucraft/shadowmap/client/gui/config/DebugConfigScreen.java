@@ -84,20 +84,20 @@ public class DebugConfigScreen extends Screen {
         final int midX = width / 2;
         int y = (height - 240) / 3 + 10;
 
-        surfaceMax.setPos(midX - 150, y);
-        caveMax.setPos(midX + 4, y);
+        surfaceMax.setPosition(midX - 150, y);
+        caveMax.setPosition(midX + 4, y);
         y += 22;
 
         for (int i = 0; i < 8; i++, y += 22) {
-            surfaceShades[i * 3].setPos(midX - 150, y);
-            surfaceShades[i * 3 + 1].setPos(midX - 100, y);
-            surfaceShades[i * 3 + 2].setPos(midX - 50, y);
-            caveShades[i * 3].setPos(midX + 4, y);
-            caveShades[i * 3 + 1].setPos(midX + 54, y);
-            caveShades[i * 3 + 2].setPos(midX + 104, y);
+            surfaceShades[i * 3].setPosition(midX - 150, y);
+            surfaceShades[i * 3 + 1].setPosition(midX - 100, y);
+            surfaceShades[i * 3 + 2].setPosition(midX - 50, y);
+            caveShades[i * 3].setPosition(midX + 4, y);
+            caveShades[i * 3 + 1].setPosition(midX + 54, y);
+            caveShades[i * 3 + 2].setPosition(midX + 104, y);
         }
 
         y = (height - 240) / 3 + 210;
-        done.setPos(midX - 75, y);
+        done.setPosition(midX - 75, y);
     }
 }

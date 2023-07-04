@@ -74,30 +74,30 @@ public class InfoConfigScreen extends Screen {
         final int midX = width / 2;
         int x = midX - (titleText.getWidth()) / 2;
         int y = (height - 240) / 3 + 10;
-        titleText.setPos(x, y);
+        titleText.setPosition(x, y);
         y += 16;
 
-        enabled.setPos(midX - 152, y);
-        showCoords.setPos(midX + 2, y);
+        enabled.setPosition(midX - 152, y);
+        showCoords.setPosition(midX + 2, y);
         y += 22;
 
-        showFacing.setPos(midX - 152, y);
-        showLight.setPos(midX + 2, y);
+        showFacing.setPosition(midX - 152, y);
+        showLight.setPosition(midX + 2, y);
         y += 22;
 
-        showWorld.setPos(midX - 152, y);
-        showDimension.setPos(midX + 2, y);
+        showWorld.setPosition(midX - 152, y);
+        showDimension.setPosition(midX + 2, y);
         y += 22;
 
-        showBiome.setPos(midX - 152, y);
-        showWeather.setPos(midX + 2, y);
+        showBiome.setPosition(midX - 152, y);
+        showWeather.setPosition(midX + 2, y);
         y += 22;
 
-        showDay.setPos(midX - 152, y);
-        showTime.setPos(midX + 2, y);
+        showDay.setPosition(midX - 152, y);
+        showTime.setPosition(midX + 2, y);
 
         y = (height - 240) / 3 + 210;
-        done.setPos(midX - 75, y);
+        done.setPosition(midX - 75, y);
     }
 
     @Override

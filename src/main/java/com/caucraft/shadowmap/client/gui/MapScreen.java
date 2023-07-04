@@ -156,19 +156,19 @@ public class MapScreen extends MapScreenApi {
 
         int y = height - 25;
         int wx = width - 25;
-        settingsButton.setPos(5, y);
-        waypointsButton.setPos(wx, y);
+        settingsButton.setPosition(5, y);
+        waypointsButton.setPosition(wx, y);
         y -= 20;
 
-        importsButton.setPos(5, y);
-        gridButton.setPos(wx, y);
+        importsButton.setPosition(5, y);
+        gridButton.setPosition(wx, y);
         y -= 20;
 
-        waypointListButton.setPos(5, y);
-        infoButton.setPos(wx, y);
+        waypointListButton.setPosition(5, y);
+        infoButton.setPosition(wx, y);
         y -= 20;
 
-        gotoButton.setPos(5, y);
+        gotoButton.setPosition(5, y);
 
         int windowWidth = client.getWindow().getFramebufferWidth();
         int windowHeight = client.getWindow().getFramebufferHeight();

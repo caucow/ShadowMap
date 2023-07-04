@@ -60,21 +60,21 @@ public class PrivacyConfigScreen extends Screen {
         final int midX = width / 2;
         int x = midX - (titleText.getWidth()) / 2;
         int y = (height - 240) / 3 + 10;
-        titleText.setPos(x, y);
+        titleText.setPosition(x, y);
         y += 16;
 
-        enabled.setPos(midX - 152, y);
-        hideCoords.setPos(midX + 2, y);
+        enabled.setPosition(midX - 152, y);
+        hideCoords.setPosition(midX + 2, y);
         y += 22;
 
-        hideFacing.setPos(midX - 152, y);
-        hideBiome.setPos(midX + 2, y);
+        hideFacing.setPosition(midX - 152, y);
+        hideBiome.setPosition(midX + 2, y);
         y += 22;
 
-        hideBlocks.setPos(midX - 152, y);
+        hideBlocks.setPosition(midX - 152, y);
 
         y = (height - 240) / 3 + 210;
-        done.setPos(midX - 75, y);
+        done.setPosition(midX - 75, y);
     }
 
     @Override

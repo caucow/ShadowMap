@@ -105,29 +105,29 @@ public class PerformanceConfigScreen extends Screen {
         final int midX = width / 2;
         int x = midX - (titleText.getWidth()) / 2;
         int y = (height - 240) / 3 + 10;
-        titleText.setPos(x, y);
+        titleText.setPosition(x, y);
         y += 16;
 
-        blockMemoryLabel.setPos(midX - 152, y);
-        blockMemory.setPos(midX - 50, y + 2);
-        blockTimeoutLabel.setPos(midX + 2, y);
-        blockTimeout.setPos(midX + 104, y + 2);
+        blockMemoryLabel.setPosition(midX - 152, y);
+        blockMemory.setPosition(midX - 50, y + 2);
+        blockTimeoutLabel.setPosition(midX + 2, y);
+        blockTimeout.setPosition(midX + 104, y + 2);
         y += 22;
 
-        metaMemoryLabel.setPos(midX - 152, y);
-        metaMemory.setPos(midX - 50, y + 2);
-        metaTimeoutLabel.setPos(midX + 2, y);
-        metaTimeout.setPos(midX + 104, y + 2);
+        metaMemoryLabel.setPosition(midX - 152, y);
+        metaMemory.setPosition(midX - 50, y + 2);
+        metaTimeoutLabel.setPosition(midX + 2, y);
+        metaTimeout.setPosition(midX + 104, y + 2);
         y += 22;
 
-        textureMemoryLabel.setPos(midX - 152, y);
-        textureMemory.setPos(midX - 50, y + 2);
-        textureTimeoutLabel.setPos(midX + 2, y);
-        textureTimeout.setPos(midX + 104, y + 2);
+        textureMemoryLabel.setPosition(midX - 152, y);
+        textureMemory.setPosition(midX - 50, y + 2);
+        textureTimeoutLabel.setPosition(midX + 2, y);
+        textureTimeout.setPosition(midX + 104, y + 2);
         y += 22;
 
         y = (height - 240) / 3 + 210;
-        done.setPos(midX - 75, y);
+        done.setPosition(midX - 75, y);
     }
 
     @Override

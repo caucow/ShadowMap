@@ -78,17 +78,17 @@ public class ImportsScreen extends Screen {
         int midX = width / 2;
         int x = midX - (pauseAllButton.getWidth() + unpauseAllButton.getWidth() + removeButton.getWidth() + 20) / 2;
         int y = height - 50;
-        pauseAllButton.setPos(x, y);
+        pauseAllButton.setPosition(x, y);
         x += pauseAllButton.getWidth() + 10;
-        unpauseAllButton.setPos(x, y);
+        unpauseAllButton.setPosition(x, y);
         x += unpauseAllButton.getWidth() + 10;
-        removeButton.setPos(x, y);
+        removeButton.setPosition(x, y);
 
         x = midX - (importButton.getWidth() + backButton.getWidth() + 20) / 2;
         y = height - 25;
-        importButton.setPos(x, y);
+        importButton.setPosition(x, y);
         x += importButton.getWidth() + 20;
-        backButton.setPos(x, y);
+        backButton.setPosition(x, y);
     }
 
     @Override

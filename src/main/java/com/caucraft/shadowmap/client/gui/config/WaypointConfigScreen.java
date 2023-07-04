@@ -140,52 +140,52 @@ public class WaypointConfigScreen extends Screen {
         final int midX = width / 2;
         int x = midX - (titleText.getWidth()) / 2;
         int y = (height - 240) / 3 + 5;
-        titleText.setPos(x, y);
+        titleText.setPosition(x, y);
         y += 10;
 
-        showOnMinimap.setPos(midX - 152, y);
-        showOnMapScreen.setPos(midX + 2, y);
+        showOnMinimap.setPosition(midX - 152, y);
+        showOnMapScreen.setPosition(midX + 2, y);
         y += 22;
 
-        showInWorld.setPos(midX - 152, y);
-        hideCoords.setPos(midX + 2, y);
+        showInWorld.setPosition(midX - 152, y);
+        hideCoords.setPosition(midX + 2, y);
         y += 22;
 
-        maxMapUiScaleLabel.setPos(midX - 152, y);
-        maxMapUiScale.setPos(midX - 50, y + 2);
-        maxWorldUiScaleLabel.setPos(midX + 2, y);
-        maxWorldUiScale.setPos(midX + 104, y + 2);
+        maxMapUiScaleLabel.setPosition(midX - 152, y);
+        maxMapUiScale.setPosition(midX - 50, y + 2);
+        maxWorldUiScaleLabel.setPosition(midX + 2, y);
+        maxWorldUiScale.setPosition(midX + 104, y + 2);
         y += 22;
 
-        pointSizeLabel.setPos(midX - 152, y);
-        pointSize.setPos(midX - 50, y + 2);
-        deathWaypoints.setPos(midX + 2, y);
+        pointSizeLabel.setPosition(midX - 152, y);
+        pointSize.setPosition(midX - 50, y + 2);
+        deathWaypoints.setPosition(midX + 2, y);
         y += 22;
 
-        defaultDeathGroupNameLabel.setPos(midX - 152, y);
-        defaultDeathGroupName.setPos(midX - 50, y + 2);
-        defaultDeathPointNameLabel.setPos(midX + 2, y);
-        defaultDeathPointName.setPos(midX + 104, y);
+        defaultDeathGroupNameLabel.setPosition(midX - 152, y);
+        defaultDeathGroupName.setPosition(midX - 50, y + 2);
+        defaultDeathPointNameLabel.setPosition(midX + 2, y);
+        defaultDeathPointName.setPosition(midX + 104, y);
         y += 22;
 
-        showDistanceInWorld.setPos(midX - 152, y);
-        showDistanceOnMap.setPos(midX + 2, y);
+        showDistanceInWorld.setPosition(midX - 152, y);
+        showDistanceOnMap.setPosition(midX + 2, y);
         y += 22;
 
-        defaultVisibleDistanceLabel.setPos(midX - 152, y);
-        defaultVisibleDistance.setPos(midX - 50, y + 2);
-        defaultExpandDistanceLabel.setPos(midX + 2, y);
-        defaultExpandDistance.setPos(midX + 104, y + 2);
+        defaultVisibleDistanceLabel.setPosition(midX - 152, y);
+        defaultVisibleDistance.setPosition(midX - 50, y + 2);
+        defaultExpandDistanceLabel.setPosition(midX + 2, y);
+        defaultExpandDistance.setPosition(midX + 104, y + 2);
         y += 22;
 
-        ignoreVisibleFilterOnMapScreen.setPos(midX - 152, y);
-        ignoreExpandFilterOnMapScreen.setPos(midX + 2, y);
+        ignoreVisibleFilterOnMapScreen.setPosition(midX - 152, y);
+        ignoreExpandFilterOnMapScreen.setPosition(midX + 2, y);
         y += 22;
 
-        shape.setPos(midX - 152, y);
+        shape.setPosition(midX - 152, y);
         y += 22;
 
-        done.setPos(midX - 75, y);
+        done.setPosition(midX - 75, y);
     }
 
     @Override

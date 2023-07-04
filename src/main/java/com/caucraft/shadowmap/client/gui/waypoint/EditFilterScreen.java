@@ -81,27 +81,27 @@ public class EditFilterScreen extends LessPoopScreen {
 
         int x = midX - (titleText.getWidth()) / 2;
         int y = ty + 10;
-        titleText.setPos(x, y);
+        titleText.setPosition(x, y);
 
         x = midX - (enabledToggle.getWidth()) / 2;
         y += 18;
-        enabledToggle.setPos(x, y);
+        enabledToggle.setPosition(x, y);
 
         x = midX - (radiusText.getWidth() + radiusField.getWidth() + 4) / 2;
         y += 24;
-        radiusText.setPos(x, y + 5);
+        radiusText.setPosition(x, y + 5);
         x += radiusText.getWidth() + 4;
-        radiusField.setPos(x, y);
+        radiusField.setPosition(x, y);
 
         x = midX - (shapeButton.getWidth()) / 2;
         y += 20;
-        shapeButton.setPos(x, y);
+        shapeButton.setPosition(x, y);
 
         x = midX - (saveButton.getWidth() + cancelButton.getWidth() + 10) / 2;
         y = ty + 210;
-        saveButton.setPos(x, y);
+        saveButton.setPosition(x, y);
         x += saveButton.getWidth() + 10;
-        cancelButton.setPos(x, y);
+        cancelButton.setPosition(x, y);
     }
 
     private void saveClicked(ButtonWidget btn) {

@@ -145,7 +145,7 @@ public class EditWaypointScreen extends LessPoopScreen {
         deleteButton.active = waypointId != null;
         saveButton.setIcon(atlas.getIcon(Icons.FLOPPY));
         cancelButton.setIcon(atlas.getIcon(Icons.NO_CIRCLE));
-        titleText.setZOffset(100);
+        titleText.setNavigationOrder(100);
 
         shortNameField.setTooltipDelay(1000);
         shortNameField.setTooltip(Tooltip.of(Text.of("Set short name or abbreviation for the map.")));
@@ -297,74 +297,74 @@ public class EditWaypointScreen extends LessPoopScreen {
         final int y = (height - 240) / 3;
         int roff = -(titleText.getWidth()) / 2;
         int ry = y + 10;
-        titleText.setPos(midX + roff, ry);
+        titleText.setPosition(midX + roff, ry);
 
         roff = -(nameField.getWidth() + shortNameField.getWidth() + colorSelect.getWidth() + colorField.getWidth() + 12) / 2;
         ry = y + 24;
-        nameField.setPos(midX + roff, ry);
+        nameField.setPosition(midX + roff, ry);
         roff += nameField.getWidth() + 4;
-        shortNameField.setPos(midX + roff, ry);
+        shortNameField.setPosition(midX + roff, ry);
         roff += shortNameField.getWidth() + 6;
-        colorSelect.setPos(midX + roff, ry);
+        colorSelect.setPosition(midX + roff, ry);
         roff += colorSelect.getWidth() + 2;
-        colorField.setPos(midX + roff, ry);
+        colorField.setPosition(midX + roff, ry);
 
         roff = -(xField.getWidth() + yField.getWidth() + zField.getWidth() + 8) / 2;
         ry += 26;
-        xField.setPos(midX + roff, ry);
+        xField.setPosition(midX + roff, ry);
         roff += xField.getWidth() + 4;
-        yField.setPos(midX + roff, ry);
+        yField.setPosition(midX + roff, ry);
         roff += yField.getWidth() + 4;
-        zField.setPos(midX + roff, ry);
+        zField.setPosition(midX + roff, ry);
         roff = -(coordsPrivacyLabel.getWidth()) / 2;
-        coordsPrivacyLabel.setPos(midX + roff, ry);
+        coordsPrivacyLabel.setPosition(midX + roff, ry);
 
         roff = -(visibleToggle.getWidth() + temporaryToggle.getWidth() + 4) / 2;
         ry += 20;
-        visibleToggle.setPos(midX + roff, ry);
+        visibleToggle.setPosition(midX + roff, ry);
         roff += visibleToggle.getWidth() + 4;
-        temporaryToggle.setPos(midX + roff, ry);
+        temporaryToggle.setPosition(midX + roff, ry);
 
         roff = -(groupButton.getWidth()) / 2;
         ry += 22;
-        groupButton.setPos(midX + roff, ry);
+        groupButton.setPosition(midX + roff, ry);
 
         roff = -(visibleFilterButton.getWidth()) / 2;
         ry += 22;
-        visibleFilterButton.setPos(midX + roff, ry);
+        visibleFilterButton.setPosition(midX + roff, ry);
 
         if (isGroup) {
             ry += 6;
-            groupLabel.setPos(midX - groupLabel.getWidth() / 2, ry);
+            groupLabel.setPosition(midX - groupLabel.getWidth() / 2, ry);
 
             roff = -(expandButton.getWidth() + autoResizeButton.getWidth() + 4) / 2;
             ry += 10;
-            expandButton.setPos(midX + roff, ry);
+            expandButton.setPosition(midX + roff, ry);
             roff += expandButton.getWidth() + 4;
-            autoResizeButton.setPos(midX + roff, ry);
+            autoResizeButton.setPosition(midX + roff, ry);
 
             roff = -(drawModeCollapsedButton.getWidth() + visibleFilterButton.getWidth() + visibleBufferField.getWidth() + 16) / 2;
             ry += 34;
-            drawModeLabel.setPos(midX + roff + drawModeCollapsedButton.getWidth() / 2 - drawModeLabel.getWidth() / 2, ry - 10);
-            drawModeCollapsedButton.setPos(midX + roff, ry);
-            drawModeExpandedButton.setPos(midX + roff, ry + 22);
+            drawModeLabel.setPosition(midX + roff + drawModeCollapsedButton.getWidth() / 2 - drawModeLabel.getWidth() / 2, ry - 10);
+            drawModeCollapsedButton.setPosition(midX + roff, ry);
+            drawModeExpandedButton.setPosition(midX + roff, ry + 22);
             roff += drawModeCollapsedButton.getWidth() + 12;
-            filterLabel.setPos(midX + roff + visibleFilterButton.getWidth() / 2 - filterLabel.getWidth() / 2, ry - 10);
-            visibleFilterButton.setPos(midX + roff, ry);
-            expandFilterButton.setPos(midX + roff, ry + 22);
+            filterLabel.setPosition(midX + roff + visibleFilterButton.getWidth() / 2 - filterLabel.getWidth() / 2, ry - 10);
+            visibleFilterButton.setPosition(midX + roff, ry);
+            expandFilterButton.setPosition(midX + roff, ry + 22);
             roff += expandFilterButton.getWidth() + 4;
-            filterBufferLabel.setPos(midX + roff + visibleBufferField.getWidth() / 2 - filterBufferLabel.getWidth() / 2, ry - 10);
-            visibleBufferField.setPos(midX + roff, ry + 2);
-            expandBufferField.setPos(midX + roff, ry + 24);
+            filterBufferLabel.setPosition(midX + roff + visibleBufferField.getWidth() / 2 - filterBufferLabel.getWidth() / 2, ry - 10);
+            visibleBufferField.setPosition(midX + roff, ry + 2);
+            expandBufferField.setPosition(midX + roff, ry + 24);
         }
 
         roff = -(deleteButton.getWidth() + saveButton.getWidth() + cancelButton.getWidth() + 10) / 2;
         ry = y + 210;
-        deleteButton.setPos(midX + roff, ry);
+        deleteButton.setPosition(midX + roff, ry);
         roff += deleteButton.getWidth() + 8;
-        saveButton.setPos(midX + roff, ry);
+        saveButton.setPosition(midX + roff, ry);
         roff += saveButton.getWidth() + 2;
-        cancelButton.setPos(midX + roff, ry);
+        cancelButton.setPosition(midX + roff, ry);
     }
 
     @Override

@@ -79,24 +79,24 @@ public class GridConfigScreen extends Screen {
         final int midX = width / 2;
         int x = midX - (titleText.getWidth()) / 2;
         int y = (height - 240) / 3 + 10;
-        titleText.setPos(x, y);
+        titleText.setPosition(x, y);
         y += 16;
 
-        showGridChunk.setPos(midX - 152, y);
-        gridColorChunkLabel.setPos(midX + 2, y);
-        gridColorChunk.setPos(midX + 84, y + 2);
+        showGridChunk.setPosition(midX - 152, y);
+        gridColorChunkLabel.setPosition(midX + 2, y);
+        gridColorChunk.setPosition(midX + 84, y + 2);
         y += 22;
 
-        showGridRegions.setPos(midX - 152, y);
-        gridColorRegionLabel.setPos(midX + 2, y);
-        gridColorRegion.setPos(midX + 84, y + 2);
+        showGridRegions.setPosition(midX - 152, y);
+        gridColorRegionLabel.setPosition(midX + 2, y);
+        gridColorRegion.setPosition(midX + 84, y + 2);
         y += 22;
 
-        gridColorRegion32Label.setPos(midX + 2, y);
-        gridColorRegion32.setPos(midX + 84, y + 2);
+        gridColorRegion32Label.setPosition(midX + 2, y);
+        gridColorRegion32.setPosition(midX + 84, y + 2);
 
         y = (height - 240) / 3 + 210;
-        done.setPos(midX - 75, y);
+        done.setPosition(midX - 75, y);
     }
 
     @Override

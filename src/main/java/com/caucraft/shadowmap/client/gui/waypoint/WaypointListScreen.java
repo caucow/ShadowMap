@@ -74,13 +74,13 @@ public class WaypointListScreen extends LessPoopScreen {
         int midX = width / 2;
         int x = midX - (addWaypointButton.getWidth() + addWaypointToButton.getWidth() + backButton.getWidth() + 32) / 2;
         int y = height - 60;
-        addWaypointButton.setPos(x, y);
-        addGroupButton.setPos(x, y + 24);
+        addWaypointButton.setPosition(x, y);
+        addGroupButton.setPosition(x, y + 24);
         x += addWaypointButton.getWidth() + 8;
-        addWaypointToButton.setPos(x, y);
-        addGroupToButton.setPos(x, y + 24);
+        addWaypointToButton.setPosition(x, y);
+        addGroupToButton.setPosition(x, y + 24);
         x += addGroupButton.getWidth() + 24;
-        backButton.setPos(x, y);
+        backButton.setPosition(x, y);
     }
 
     @Override

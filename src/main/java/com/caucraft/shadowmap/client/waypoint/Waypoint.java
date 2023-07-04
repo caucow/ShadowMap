@@ -213,7 +213,7 @@ public class Waypoint extends DeletableLiveObject {
         if (filter == null || !filter.isEnabled() || ignoreFilter) {
             return true;
         }
-        return filter.contains(MathHelper.fastFloor(x - pos.x), MathHelper.fastFloor(z - pos.z));
+        return filter.contains(MathHelper.floor(x - pos.x), MathHelper.floor(z - pos.z));
     }
 
     /**

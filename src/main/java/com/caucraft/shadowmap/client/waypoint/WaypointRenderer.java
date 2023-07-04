@@ -596,7 +596,7 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
     }
 
     private void simulateHurtFlinch(Camera camera, Matrix4d matrix, float tickDelta) {
-        // From GameRenderer#bobViewWhenHurt
+        // From GameRenderer#tiltViewWhenHurt
         if (!(camera.getFocusedEntity() instanceof LivingEntity livingEntity)) {
             return;
         }
@@ -611,9 +611,10 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         }
         hurtTicks /= (float)livingEntity.maxHurtTime;
         hurtTicks = MathHelper.sin(hurtTicks * hurtTicks * hurtTicks * hurtTicks * (float)Math.PI);
-        knockback = livingEntity.knockbackVelocity;
+        knockback = livingEntity.getDamageTiltYaw();
         matrix.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(-knockback));
-        matrix.rotate(RotationAxis.POSITIVE_Z.rotationDegrees(-hurtTicks * 14.0f));
+        float scaledHurtAmount = (float)((double)(-hurtTicks) * 14.0 * MinecraftClient.getInstance().options.getDamageTiltStrength().getValue());
+        matrix.rotate(RotationAxis.POSITIVE_Z.rotationDegrees(scaledHurtAmount));
         matrix.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(knockback));
     }
 

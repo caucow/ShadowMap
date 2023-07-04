@@ -81,28 +81,28 @@ public class MapScreenConfigScreen extends Screen {
         final int midX = width / 2;
         int x = midX - (titleText.getWidth()) / 2;
         int y = (height - 240) / 3 + 10;
-        titleText.setPos(x, y);
+        titleText.setPosition(x, y);
         y += 16;
 
-        showGrid.setPos(midX - 152, y);
-        showInfo.setPos(midX + 2, y);
+        showGrid.setPosition(midX - 152, y);
+        showInfo.setPosition(midX + 2, y);
         y += 22;
 
-        showInfoCoords.setPos(midX - 152, y);
-        showInfoBiome.setPos(midX + 2, y);
+        showInfoCoords.setPosition(midX - 152, y);
+        showInfoBiome.setPosition(midX + 2, y);
         y += 22;
 
-        showInfoBlocks.setPos(midX - 152, y);
-        showInfoBlockstates.setPos(midX + 2, y);
+        showInfoBlocks.setPosition(midX - 152, y);
+        showInfoBlockstates.setPosition(midX + 2, y);
         y += 22;
 
-        minZoomLabel.setPos(midX - 152, y);
-        minZoom.setPos(midX - 100, y + 2);
-        maxZoomLabel.setPos(midX + 2, y);
-        maxZoom.setPos(midX + 54, y + 2);
+        minZoomLabel.setPosition(midX - 152, y);
+        minZoom.setPosition(midX - 100, y + 2);
+        maxZoomLabel.setPosition(midX + 2, y);
+        maxZoom.setPosition(midX + 54, y + 2);
 
         y = (height - 240) / 3 + 210;
-        done.setPos(midX - 75, y);
+        done.setPosition(midX - 75, y);
     }
 
     @Override

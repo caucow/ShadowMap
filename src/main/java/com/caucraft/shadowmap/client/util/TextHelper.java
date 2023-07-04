@@ -310,7 +310,7 @@ public class TextHelper {
      * @param y y coordinate of the top edge of the text.
      */
     public void draw(String text, float x, float y) {
-        renderer.draw(text, x, y, color, shadow, matrix, vbuffer, !depthTest, backgroundColor, light, reverse);
+        renderer.draw(text, x, y, color, shadow, matrix, vbuffer, depthTest ? TextRenderer.TextLayerType.NORMAL : TextRenderer.TextLayerType.SEE_THROUGH, backgroundColor, light, reverse);
         if (immediate) {
             vbuffer.draw();
         }
@@ -337,7 +337,7 @@ public class TextHelper {
      * @param y y coordinate of the top edge of the text.
      */
     public void draw(OrderedText text, float x, float y) {
-        renderer.draw(text, x, y, color, shadow, matrix, vbuffer, !depthTest, backgroundColor, light);
+        renderer.draw(text, x, y, color, shadow, matrix, vbuffer, depthTest ? TextRenderer.TextLayerType.NORMAL : TextRenderer.TextLayerType.SEE_THROUGH, backgroundColor, light);
         if (immediate) {
             vbuffer.draw();
         }

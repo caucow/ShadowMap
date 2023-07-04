@@ -123,14 +123,29 @@ public class ImportSupplierListWidget extends AlwaysSelectedEntryListWidget<Impo
         }
 
         @Override
+        public void setFocused(boolean focused) {
+            super.setFocused(focused);
+            if (!focused) {
+                for (ClickableWidget widget : childListBecauseINeedToMakeItMyself) {
+                    widget.setFocused(false);
+                }
+            }
+        }
+
+        @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            boolean selected = getSelectedOrNull() != this;
             setSelected(this);
             int x = getRowLeft();
             int y = getRowTop(ImportSupplierListWidget.this.children().indexOf(this));
             for (ClickableWidget widget : childListBecauseINeedToMakeItMyself) {
-                widget.mouseClicked(mouseX - x, mouseY - y, button);
+                if (widget.mouseClicked(mouseX - x, mouseY - y, button)) {
+                    widget.setFocused(true);
+                } else {
+                    widget.setFocused(false);
+                }
             }
-            return true;
+            return selected;
         }
 
         @Override
@@ -204,7 +219,7 @@ public class ImportSupplierListWidget extends AlwaysSelectedEntryListWidget<Impo
 
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
             this.label = new TextWidget(Text.of("Server Address"), textRenderer);
-            this.label.setPos(0, 15);
+            this.label.setPosition(0, 15);
             this.server = new RecustomTextFieldWidget(textRenderer, 1, 25, 314, 10, null);
             this.server.setMaxLength(500);
             this.server.setText(serverAddress);
@@ -253,19 +268,19 @@ public class ImportSupplierListWidget extends AlwaysSelectedEntryListWidget<Impo
             this.usesDefaultData = new RecustomToggleButtonWidget(212, 0, 104, 12, "Default Data", (btn) -> updateImporter(), true);
 
             this.portLabel = new TextWidget(Text.of("Port:"), textRenderer);
-            this.portLabel.setPos(0, 16);
+            this.portLabel.setPosition(0, 16);
             this.port = new RecustomTextFieldWidget(textRenderer, 26, 14, 38, 10, null);
             this.port.setText(Integer.toString(importer.getServerPort()));
             this.port.setTextPredicate((text) -> text.matches("\\d{0,5}"));
             this.port.setTypedChangeListener((text) -> updateImporter());
             this.worldLabel = new TextWidget(Text.of("World:"), textRenderer);
-            this.worldLabel.setPos(69, 16);
+            this.worldLabel.setPosition(69, 16);
             this.world = new RecustomTextFieldWidget(textRenderer, 100, 14, 85, 10, null);
             this.world.setMaxLength(100);
             this.world.setText(importer.getWorldName());
             this.world.setTypedChangeListener((text) -> updateImporter());
             this.dimensionLabel = new TextWidget(Text.of("Dimension:"), textRenderer);
-            this.dimensionLabel.setPos(190, 16);
+            this.dimensionLabel.setPosition(190, 16);
             this.dimension = new RecustomTextFieldWidget(textRenderer, 240, 14, 75, 10, null);
             this.dimension.setMaxLength(100);
             this.dimension.setText(importer.getDimensionName());

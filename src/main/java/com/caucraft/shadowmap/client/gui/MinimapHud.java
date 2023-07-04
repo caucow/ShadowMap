@@ -478,7 +478,7 @@ public class MinimapHud extends DrawableHelper {
         MapWorld mapWorld = shadowMap.getMapManager().getCurrentWorld();
         WorldKey worldKey = mapWorld == null ? null : mapWorld.getWorldKey();
         Vec3d camPos = camEntity.getPos();
-        BlockPos camBPos = new BlockPos(camPos);
+        BlockPos camBPos = camEntity.getBlockPos();
         World world = camEntity.getWorld();
         InfoConfig infoConfig = shadowMap.getConfig().infoConfig;
         PrivacyConfig privacyConfig = shadowMap.getConfig().privacyConfig;

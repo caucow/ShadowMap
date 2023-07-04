@@ -81,31 +81,31 @@ public class CoreConfigScreen extends Screen {
         final int midX = width / 2;
         int x = midX - (titleText.getWidth()) / 2;
         int y = (height - 240) / 3 + 10;
-        titleText.setPos(x, y);
+        titleText.setPosition(x, y);
         y += 16;
 
-        minimapConfig.setPos(midX - 152, y);
-        mapScreenConfig.setPos(midX + 2, y);
+        minimapConfig.setPosition(midX - 152, y);
+        mapScreenConfig.setPosition(midX + 2, y);
         y += 22;
 
-        waypointConfig.setPos(midX - 152, y);
-        infoConfig.setPos(midX + 2, y);
+        waypointConfig.setPosition(midX - 152, y);
+        infoConfig.setPosition(midX + 2, y);
         y += 22;
 
-        privacyConfig.setPos(midX - 152, y);
-        gridConfig.setPos(midX + 2, y);
+        privacyConfig.setPosition(midX - 152, y);
+        gridConfig.setPosition(midX + 2, y);
         y += 22;
 
-        performanceConfig.setPos(midX - 152, y);
-        debugConfig.setPos(midX + 2, y);
+        performanceConfig.setPosition(midX - 152, y);
+        debugConfig.setPosition(midX + 2, y);
         y += 44;
 
-        waypoints.setPos(midX - 152, y);
-        imports.setPos(midX + 2, y);
+        waypoints.setPosition(midX - 152, y);
+        imports.setPosition(midX + 2, y);
 
         y = (height - 240) / 3 + 210;
-        reload.setPos(midX - 75, y - 22);
-        done.setPos(midX - 75, y);
+        reload.setPosition(midX - 75, y - 22);
+        done.setPosition(midX - 75, y);
     }
 
     @Override

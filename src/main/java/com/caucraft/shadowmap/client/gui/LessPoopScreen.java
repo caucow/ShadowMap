@@ -33,7 +33,7 @@ public abstract class LessPoopScreen extends Screen {
         Element hoveredElement = hovered.orElse(null);
         for (Element child : children()) {
             if (hoveredElement != child && child instanceof ClickableWidget && ((ClickableWidget) child).isFocused()) {
-                child.changeFocus(true);
+                child.setFocused(true);
             }
         }
         if (hoveredElement == null) {
@@ -56,7 +56,7 @@ public abstract class LessPoopScreen extends Screen {
     public void setFocused(@Nullable Element focused) {
         for (Element child : children()) {
             if (focused != child && child instanceof ClickableWidget && ((ClickableWidget) child).isFocused()) {
-                child.changeFocus(true);
+                child.setFocused(true);
             }
         }
         super.setFocused(focused);

@@ -134,7 +134,6 @@ public class ColorSelectWidget extends ClickableWidget {
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        super.renderButton(matrices, mouseX, mouseY, delta);
         int x = getX();
         int y = getY();
 

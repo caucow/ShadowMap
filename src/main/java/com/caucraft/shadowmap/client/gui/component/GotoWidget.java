@@ -74,11 +74,17 @@ public class GotoWidget extends FullscreenWidget {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (ButtonWidget widget : buttons) {
             if (widget.mouseClicked(mouseX, mouseY, button)) {
-                return true;
+                widget.setFocused(true);
+            } else {
+                widget.setFocused(false);
             }
         }
         for (RecustomTextFieldWidget widget : textFields) {
-            widget.mouseClicked(mouseX, mouseY, button);
+            if (widget.mouseClicked(mouseX, mouseY, button)) {
+                widget.setFocused(true);
+            } else {
+                widget.setFocused(false);
+            }
         }
         return true;
     }
@@ -91,7 +97,9 @@ public class GotoWidget extends FullscreenWidget {
             }
         }
         for (RecustomTextFieldWidget widget : textFields) {
-            widget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+            if (widget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
+                return true;
+            }
         }
         return true;
     }
@@ -104,7 +112,9 @@ public class GotoWidget extends FullscreenWidget {
             }
         }
         for (RecustomTextFieldWidget widget : textFields) {
-            widget.mouseReleased(mouseX, mouseY, button);
+            if (widget.mouseReleased(mouseX, mouseY, button)) {
+                return true;
+            }
         }
         return true;
     }
@@ -127,7 +137,9 @@ public class GotoWidget extends FullscreenWidget {
             }
         }
         for (RecustomTextFieldWidget widget : textFields) {
-            widget.mouseScrolled(mouseX, mouseY, amount);
+            if (widget.mouseScrolled(mouseX, mouseY, amount)) {
+                return true;
+            }
         }
         return true;
     }
@@ -140,7 +152,9 @@ public class GotoWidget extends FullscreenWidget {
             }
         }
         for (RecustomTextFieldWidget widget : textFields) {
-            widget.keyPressed(keyCode, scanCode, modifiers);
+            if (widget.keyPressed(keyCode, scanCode, modifiers)) {
+                return true;
+            }
         }
         return true;
     }
@@ -153,7 +167,9 @@ public class GotoWidget extends FullscreenWidget {
             }
         }
         for (RecustomTextFieldWidget widget : textFields) {
-            widget.keyReleased(keyCode, scanCode, modifiers);
+            if (widget.keyReleased(keyCode, scanCode, modifiers)) {
+                return true;
+            }
         }
         return true;
     }
@@ -166,7 +182,9 @@ public class GotoWidget extends FullscreenWidget {
             }
         }
         for (RecustomTextFieldWidget widget : textFields) {
-            widget.charTyped(chr, modifiers);
+            if (widget.charTyped(chr, modifiers)) {
+                return true;
+            }
         }
         return true;
     }

@@ -75,25 +75,25 @@ public class AddImportsScreen extends Screen {
         int midX = width / 2;
         int x = midX - (manualAddField.getWidth() + importTypeButton.getWidth() + 5) / 2;
         int y = height - 75;
-        manualAddField.setPos(x, y + 2);
+        manualAddField.setPosition(x, y + 2);
         x += manualAddField.getWidth() + 5;
-        importTypeButton.setPos(x, y);
+        importTypeButton.setPosition(x, y);
 
         x = midX - (enableAllButton.getWidth() + disableAllButton.getWidth() + manualAddButton.getWidth() + autoScanButton.getWidth() + 20) / 2;
         y = height - 50;
-        enableAllButton.setPos(x, y);
+        enableAllButton.setPosition(x, y);
         x += enableAllButton.getWidth() + 4;
-        disableAllButton.setPos(x, y);
+        disableAllButton.setPosition(x, y);
         x += disableAllButton.getWidth() + 4;
-        autoScanButton.setPos(x, y);
+        autoScanButton.setPosition(x, y);
         x += autoScanButton.getWidth() + 12;
-        manualAddButton.setPos(x, y);
+        manualAddButton.setPosition(x, y);
 
         x = midX - (importButton.getWidth() + cancelButton.getWidth() + 20) / 2;
         y = height - 25;
-        importButton.setPos(x, y);
+        importButton.setPosition(x, y);
         x += importButton.getWidth() + 20;
-        cancelButton.setPos(x, y);
+        cancelButton.setPosition(x, y);
     }
 
     @Override

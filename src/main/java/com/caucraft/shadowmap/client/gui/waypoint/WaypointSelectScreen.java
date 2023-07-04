@@ -63,11 +63,11 @@ public class WaypointSelectScreen extends LessPoopScreen {
         int x = midX - (selectButton.getWidth() + selectNoneButton.getWidth() + backButton.getWidth() + 16) / 2;
         int y = height - 60;
 
-        selectButton.setPos(x, y);
+        selectButton.setPosition(x, y);
         x += selectButton.getWidth() + 8;
-        selectNoneButton.setPos(x, y);
+        selectNoneButton.setPosition(x, y);
         x += selectNoneButton.getWidth() + 8;
-        backButton.setPos(x, y);
+        backButton.setPosition(x, y);
     }
 
     @Override

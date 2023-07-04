@@ -151,53 +151,53 @@ public class MinimapConfigScreen extends Screen {
         final int midX = width / 2;
         int x = midX - (titleText.getWidth()) / 2;
         int y = (height - 240) / 3 + 5;
-        titleText.setPos(x, y);
+        titleText.setPosition(x, y);
         y += 10;
 
-        enabled.setPos(midX - 152, y);
-        showGrid.setPos(midX + 2, y);
+        enabled.setPosition(midX - 152, y);
+        showGrid.setPosition(midX + 2, y);
         y += 22;
 
-        shape.setPos(midX - 152, y);
-        lockNorth.setPos(midX + 2, y);
+        shape.setPosition(midX - 152, y);
+        lockNorth.setPosition(midX + 2, y);
         y += 22;
 
-        horizontalAlignment.setPos(midX - 152, y);
-        offsetXLabel.setPos(midX + 2, y);
-        offsetX.setPos(midX + 104, y + 2);
+        horizontalAlignment.setPosition(midX - 152, y);
+        offsetXLabel.setPosition(midX + 2, y);
+        offsetX.setPosition(midX + 104, y + 2);
         y += 22;
 
-        verticalAlignment.setPos(midX - 152, y);
-        offsetYLabel.setPos(midX + 2, y);
-        offsetY.setPos(midX + 104, y + 2);
+        verticalAlignment.setPosition(midX - 152, y);
+        offsetYLabel.setPosition(midX + 2, y);
+        offsetY.setPosition(midX + 104, y + 2);
         y += 22;
 
-        sizeMode.setPos(midX - 152, y);
-        radiusLabel.setPos(midX + 2, y);
-        radius.setPos(midX + 104, y + 2);
+        sizeMode.setPosition(midX - 152, y);
+        radiusLabel.setPosition(midX + 2, y);
+        radius.setPosition(midX + 104, y + 2);
         y += 22;
 
-        zoomLabel.setPos(midX - 152, y);
-        zoom.setPos(midX - 100, y + 2);
-        zoomWrap.setPos(midX + 2, y);
+        zoomLabel.setPosition(midX - 152, y);
+        zoom.setPosition(midX - 100, y + 2);
+        zoomWrap.setPosition(midX + 2, y);
         y += 22;
 
-        minZoomLabel.setPos(midX - 152, y);
-        minZoom.setPos(midX - 100, y + 2);
-        maxZoomLabel.setPos(midX + 2, y);
-        maxZoom.setPos(midX + 54, y + 2);
+        minZoomLabel.setPosition(midX - 152, y);
+        minZoom.setPosition(midX - 100, y + 2);
+        maxZoomLabel.setPosition(midX + 2, y);
+        maxZoom.setPosition(midX + 54, y + 2);
         y += 22;
 
-        showCompass.setPos(midX - 152, y);
-        compassUiScaleMaxLabel.setPos(midX + 2, y);
-        compassUiScaleMax.setPos(midX + 104, y + 2);
+        showCompass.setPosition(midX - 152, y);
+        compassUiScaleMaxLabel.setPosition(midX + 2, y);
+        compassUiScaleMax.setPosition(midX + 104, y + 2);
         y += 22;
 
-        uiScaleMaxLabel.setPos(midX + 2, y);
-        uiScaleMax.setPos(midX + 104, y + 2);
+        uiScaleMaxLabel.setPosition(midX + 2, y);
+        uiScaleMax.setPosition(midX + 104, y + 2);
         y += 22;
 
-        done.setPos(midX - 75, y);
+        done.setPosition(midX - 75, y);
     }
 
     @Override
