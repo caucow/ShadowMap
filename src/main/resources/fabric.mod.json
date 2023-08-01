@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "shadowmap",
+  "version": "${version}",
+  "name": "ShadowMap",
+  "description": "A more edgy mapping tool for Minecraft.",
+  "authors": [
+    "Shadowtrot"
+  ],
+  "contact": {
+    "repo": "https://github.com/caucow/ShadowMap"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/shadowmap/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.caucraft.shadowmap.client.ShadowMap"
+    ],
+    "shadowmap": [
+      "com.caucraft.shadowmap.client.ShadowMapReentry"
+    ],
+    "shadowmap-apiexample": [
+      "com.caucraft.shadowmap.api.example.ExampleMapExtension"
+    ],
+    "modmenu": [
+        "com.caucraft.shadowmap.client.ModMenuReentry"
+    ]
+  },
+  "mixins": [
+    "shadowmap.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.caucraft.shadowmap.client.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "AbstractBlockMixin",
+    "BlockStateMixin",
+    "ClientChunkManagerMixin",
+    "ClientWorldMixin",
+    "ConnectScreenMixin",
+    "MinecraftClientMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "GameRendererAccess"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
