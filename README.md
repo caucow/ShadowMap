@@ -145,14 +145,14 @@ work later. What works now will work well later. What works well now will be ine
   ![(set_focus.png)](src/main/resources/assets/shadowmap/textures/icons/set_focus.png?raw=true)
   to jump straight to a set of X/Z coordinates or waypoint.
 
-### Waypoints and Groups
+### Waypoints and Groups (Overview)
 
 - The **Waypoint List** can be accessed in-game from the fullscreen map using the waypoint-list button
   ![(waypoint_list.png)](src/main/resources/assets/shadowmap/textures/icons/waypoint_list.png?raw=true), directly with
   the Waypoints keybind, or from the settings menu. Additionally, waypoints can be instantly added or edited by right
   clicking on the fullscreen map.
 - Normal **waypoints** have all the usual controls you'd expect: name, position, visibility, color (you can edit the RGB
-  hex code or click the swatch can to select a color from a HSV palette). They also have two new controls: Group and
+  hex code or click the swatch to select a color from a HSV palette). They also have two new controls: Group and
   Visibility Filter. Group designates another waypoint to be a group, containing the current waypoint. Filters, when
   configured and enabled, automatically manage waypoints based on the player's distance to them.<br>
   ![(edit-waypoint-normal.png)](readme-assets/edit-waypoint-normal.png?raw=true)
@@ -200,15 +200,44 @@ work later. What works now will work well later. What works well now will be ine
   ![(expand_off.png)](src/main/resources/assets/shadowmap/textures/icons/expand_off.png?raw=true)
   will be respected by the fullscreen map.
 
+### Waypoint Groups, Bulk Management, and Filter Setup (Advanced)
+
+- Waypoints can be converted to groups either by clicking the "Group" button in the waypoint editor, or by dragging one
+  waypoint over another in the waypoint list. If many waypoints need to be added to a new group, the latter is generally
+  easier.
+- It is **currently not possible to select** and move or delete **multiple waypoints** at a time. The easiest workaround
+  for this (pending GUI overhaul) is to use the waypoint list to drag waypoints between groups or into a group that can
+  be deleted.<br>
+  ![(waypoint-management.gif)](readme-assets/waypoint-management.gif))
+- The **Auto-Position** option serves two functions: It positions the group point in the middle of a circle that
+  contains all its contents (such a circle would touch the two or three outermost waypoints in the group), AND it
+  automatically resizes the filters, if present, using the "AF Buffer" (Auto-Filter Buffer Radius") next to each filter
+  button.
+- **A filter's radius IS NOT THE SAME as the buffer radius** for that filter. When a waypoint group is automatically
+  repositioned its filters' radii are set to the size of the minimum circle containing all the group's waypoints PLUS
+  the buffer radius. Currently, disabling Auto-Positioning also disables automatic filter sizing; these will likely be
+  separate options in a future release.<br>
+  ![(filter-radius-demo.png)](readme-assets/filter-radius-demo.png)
+- Groups can be drawn differently on the map depending on whether they are expanded or collapsed and whether they have
+  an Expansion Filter configured. With a filter, all four Draw Modes (None, Point, Filter, and Point-Filter) take on a
+  different appearance. **Without an Expansion Filter, the Filter and Point-Filter draw modes render the same as the
+  Point draw mode.**<br>
+  ![(group-draw-modes.png)](readme-assets/group-draw-modes.png)
+- By default, waypoints and groups do not have a Visibility Filter, and groups do not have an Expansion Filter. However,
+  groups DO always allow you to configure their Filter Buffers. I am aware that the distinction between filter radius
+  and buffer radius is not as clear as it could be and will address this in the future.
+
 ### Importing Maps from Other Mods
 
 - The **Imports List** can be accessed in-game from the fullscreen map using the import button
   ![(import.png)](src/main/resources/assets/shadowmap/textures/icons/import.png?raw=true),
   or from the settings menu. Add imports by clicking the "Add Importers..." button.
-- When adding imports, "Enabled" means that the listed import task will be created and started when you click "Start
-  Imports". By default, imports for singleplayer worlds and multiplayer servers *that can be found in the server list*
-  are enabled, but **the "Enable/Disable All" buttons can be used to toggle all imports then pick out specific
-  exceptions.**
+- When adding imports, **"Enabled" means that the listed import task will be created** and started when you click "Start
+  Imports". **If the world or server uses a custom Data Pack** that adds blocks, biomes, or dimensions, the "Default
+  Data" option should be set to `false`; this prevents the import from being started until the world is loaded so all
+  blocks and biomes are available.
+- By default, imports for singleplayer worlds and multiplayer servers *that can be found in the server list* are
+  enabled, but **the "Enable/Disable All" buttons can be used to toggle all imports then pick out specific exceptions.**
 - The importer attempts to figure out an import task's IP, port, world name, and dimension, but these should be checked
   for accuracy before starting new imports. The import type (currently only XAERO for Xaero's map data or XAERO_WP for
   Xaero's waypoints are supported) and path to the data folder or file is listed in the bottom row of each import. Port

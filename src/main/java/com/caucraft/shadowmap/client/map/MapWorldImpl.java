@@ -455,7 +455,7 @@ public class MapWorldImpl implements MapWorld {
         return mapManager.executeGlobalIOTask(new WaypointLoadTask());
     }
 
-    CompletableFuture<?> scheduleWaypointSave() {
+    public CompletableFuture<?> scheduleWaypointSave() {
         return mapManager.executeGlobalIOTask(new WaypointSaveTask());
     }
 
