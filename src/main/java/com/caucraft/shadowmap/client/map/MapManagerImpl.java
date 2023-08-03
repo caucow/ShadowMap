@@ -343,6 +343,14 @@ public class MapManagerImpl implements MapManager, Closeable, SimpleSynchronousR
         mapData.shadowMap$setColorARGB(0x40ff0000);
         mapData.shadowMap$setTinted(false);
         mapData.shadowMap$setOpacity(false, 64);
+
+        synchronized (this) {
+            for (MapWorldImpl loadedWorld : new ArrayList<>(loadedWorlds.values())) {
+                for (RegionContainerImpl loadedRegion : loadedWorld.getRegions()) {
+                    loadedRegion.scheduleRerenderAll(true);
+                }
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////

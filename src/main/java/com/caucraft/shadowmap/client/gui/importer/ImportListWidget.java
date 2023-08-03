@@ -59,6 +59,18 @@ public class ImportListWidget extends AlwaysSelectedEntryListWidget<ImportListWi
         }
     }
 
+    public void removeAll(boolean includeUnfinished) {
+        for (StupidAbstraction entry : new ArrayList<>(children())) {
+            if (entry instanceof ImportEntry importEntry) {
+                ImportTask<?> task = importEntry.task;
+                if (task.isDone() || includeUnfinished) {
+                    importManager.removeTask(task.getId());
+                    removeEntry(entry);
+                }
+            }
+        }
+    }
+
     @Override
     public int getRowWidth() {
         return 320;
@@ -235,7 +247,7 @@ public class ImportListWidget extends AlwaysSelectedEntryListWidget<ImportListWi
 
         private static String getProgressString(float progress) {
             if (progress < -3) {
-                return "Done w/ " + (-3 - progress) + " Err";
+                return "Done w/ " + (-3 - (int) progress) + " Err";
             }
             if (progress == -3) {
                 return "Done";
