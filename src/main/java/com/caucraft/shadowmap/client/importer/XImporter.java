@@ -94,15 +94,23 @@ public class XImporter {
             List<String> lines = IOUtils.readLines(new ByteBufferInputStream(buffer), StandardCharsets.UTF_8);
             Set<UUID> usedIds = new HashSet<>();
             for (String line : lines) {
-                UUID id;
-                while (!usedIds.add(id = wpManager.getUniqueID())) {}
                 if (line.startsWith("#")) {
                     continue;
                 }
+                UUID id;
+                while (!usedIds.add(id = wpManager.getUniqueID())) {}
                 String[] split = line.split(":");
                 if (split[0].equals("sets")) {
-                    for (int i = 0; i < split.length; i++) {
-                        groupMap.put(split[i], new WaypointGroup(wpManager, id));
+                    for (int i = 1; i < split.length; i++) {
+                        String set = split[i];
+                        if (set.equals("gui.xaero_default") || set.equals("xaero_default")) {
+                            continue;
+                        }
+                        WaypointGroup group = new WaypointGroup(wpManager, id);
+                        group.setName(set);
+                        groupMap.put(set, group);
+                        // Generate new ID after every group
+                        while (!usedIds.add(id = wpManager.getUniqueID())) {}
                     }
                 } else if (split[0].equals("waypoint")) {
                     String name = split[1];
