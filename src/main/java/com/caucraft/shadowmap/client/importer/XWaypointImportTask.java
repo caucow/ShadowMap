@@ -128,6 +128,8 @@ public class XWaypointImportTask extends ImportTask<XWaypointImportTask.XWaypoin
                     deathGroup.setDrawExpanded(WaypointGroup.DrawMode.NONE);
                     deathGroup.setDrawCollapsed(WaypointGroup.DrawMode.NONE);
                 }
+
+                world.scheduleWaypointSave();
                 return null;
             });
         }

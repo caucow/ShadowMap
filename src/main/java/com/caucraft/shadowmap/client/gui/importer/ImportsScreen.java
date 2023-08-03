@@ -1,6 +1,8 @@
 package com.caucraft.shadowmap.client.gui.importer;
 
 import com.caucraft.shadowmap.client.ShadowMap;
+import com.caucraft.shadowmap.client.gui.LessPoopScreen;
+import com.caucraft.shadowmap.client.gui.component.ConfirmDialogWidget;
 import com.caucraft.shadowmap.client.gui.component.RecustomIconButtonWidget;
 import com.caucraft.shadowmap.client.util.TextHelper;
 import net.minecraft.client.MinecraftClient;
@@ -10,11 +12,12 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-public class ImportsScreen extends Screen {
+public class ImportsScreen extends LessPoopScreen {
     private final Screen parentScreen;
     private final ImportListWidget importList;
     private final RecustomIconButtonWidget pauseAllButton;
     private final RecustomIconButtonWidget unpauseAllButton;
+    private final RecustomIconButtonWidget removeAllButton;
     private final RecustomIconButtonWidget removeButton;
     private final RecustomIconButtonWidget importButton;
     private final RecustomIconButtonWidget backButton;
@@ -24,9 +27,10 @@ public class ImportsScreen extends Screen {
         this.parentScreen = parentScreen;
         this.importList = new ImportListWidget(MinecraftClient.getInstance(), ShadowMap.getInstance().getMapManager().getImportManager(), width, height, 30, height - 55);
         this.importList.setRenderBackground(false);
-        this.pauseAllButton = new RecustomIconButtonWidget(0, 0, 100, 20, "Pause All", this::onPauseAllClicked);
-        this.unpauseAllButton = new RecustomIconButtonWidget(0, 0, 100, 20, "Unpause All", this::onUnpauseAllClicked);
-        this.removeButton = new RecustomIconButtonWidget(0, 0, 100, 20, "Remove Import", this::onRemoveClicked);
+        this.pauseAllButton = new RecustomIconButtonWidget(0, 0, 73, 20, "Pause All", this::onPauseAllClicked);
+        this.unpauseAllButton = new RecustomIconButtonWidget(0, 0, 73, 20, "Unpause All", this::onUnpauseAllClicked);
+        this.removeAllButton = new RecustomIconButtonWidget(0, 0, 73, 20, "Remove All", this::onRemoveAllClicked);
+        this.removeButton = new RecustomIconButtonWidget(0, 0, 73, 20, "Remove", this::onRemoveClicked);
         this.importButton = new RecustomIconButtonWidget(0, 0, 150, 20, "Add Importers...", this::onImportClicked);
         this.backButton = new RecustomIconButtonWidget(0, 0, 150, 20, "Back", this::onDoneClicked);
     }
@@ -38,6 +42,7 @@ public class ImportsScreen extends Screen {
         addDrawableChild(importList);
         addDrawableChild(pauseAllButton);
         addDrawableChild(unpauseAllButton);
+        addDrawableChild(removeAllButton);
         addDrawableChild(removeButton);
         addDrawableChild(importButton);
         addDrawableChild(backButton);
@@ -51,6 +56,18 @@ public class ImportsScreen extends Screen {
 
     private void onUnpauseAllClicked(ButtonWidget btn) {
         importList.setAllPaused(false);
+    }
+
+    private void onRemoveAllClicked(ButtonWidget btn) {
+        confirmAction("Remove all Imports?",
+                new ConfirmDialogWidget.Option("Remove All Done", null, false, () -> {
+                    importList.removeAll(false);
+                }),
+                new ConfirmDialogWidget.Option("Remove All", null, false, () -> {
+                    importList.removeAll(true);
+                }),
+                new ConfirmDialogWidget.Option("Cancel", null, true, () -> {})
+        );
     }
 
     private void onRemoveClicked(ButtonWidget btn) {
@@ -77,12 +94,14 @@ public class ImportsScreen extends Screen {
         importList.setSize(width, height);
 
         int midX = width / 2;
-        int x = midX - (pauseAllButton.getWidth() + unpauseAllButton.getWidth() + removeButton.getWidth() + 20) / 2;
+        int x = midX - (pauseAllButton.getWidth() + unpauseAllButton.getWidth() + removeAllButton.getWidth() + removeButton.getWidth() + 28) / 2;
         int y = height - 50;
         pauseAllButton.setPosition(x, y);
-        x += pauseAllButton.getWidth() + 10;
+        x += pauseAllButton.getWidth() + 4;
         unpauseAllButton.setPosition(x, y);
-        x += unpauseAllButton.getWidth() + 10;
+        x += unpauseAllButton.getWidth() + 20;
+        removeAllButton.setPosition(x, y);
+        x += removeAllButton.getWidth() + 4;
         removeButton.setPosition(x, y);
 
         x = midX - (importButton.getWidth() + backButton.getWidth() + 20) / 2;
