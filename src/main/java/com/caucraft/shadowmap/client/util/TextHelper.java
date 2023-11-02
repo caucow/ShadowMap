@@ -1,5 +1,6 @@
 package com.caucraft.shadowmap.client.util;
 
+import com.caucraft.shadowmap.client.ShadowMap;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -538,7 +539,7 @@ public class TextHelper {
         MinecraftClient client = MinecraftClient.getInstance();
         return get(
                 client.textRenderer,
-                client.getBufferBuilders().getEntityVertexConsumers(),
+                ShadowMap.getInstance().getBufferProvider(),
                 new Matrix4f()
         );
     }
@@ -557,7 +558,7 @@ public class TextHelper {
         MinecraftClient client = MinecraftClient.getInstance();
         return get(
                 client.textRenderer,
-                client.getBufferBuilders().getEntityVertexConsumers(),
+                ShadowMap.getInstance().getBufferProvider(),
                 matrices.peek().getPositionMatrix()
         );
     }
@@ -569,7 +570,7 @@ public class TextHelper {
         MinecraftClient client = MinecraftClient.getInstance();
         return get(
                 renderer,
-                client.getBufferBuilders().getEntityVertexConsumers(),
+                ShadowMap.getInstance().getBufferProvider(),
                 matrices.peek().getPositionMatrix()
         );
     }
@@ -581,7 +582,7 @@ public class TextHelper {
         MinecraftClient client = MinecraftClient.getInstance();
         return get(
                 client.textRenderer,
-                client.getBufferBuilders().getEntityVertexConsumers(),
+                ShadowMap.getInstance().getBufferProvider(),
                 matrix
         );
     }
@@ -593,7 +594,7 @@ public class TextHelper {
         MinecraftClient client = MinecraftClient.getInstance();
         return get(
                 renderer,
-                client.getBufferBuilders().getEntityVertexConsumers(),
+                ShadowMap.getInstance().getBufferProvider(),
                 matrix
         );
     }
