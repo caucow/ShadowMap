@@ -98,10 +98,9 @@ public class AddImportsScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-        renderBackground(drawContext);
-        super.render(drawContext, mouseX, mouseY, delta);
-        TextHelper.get(textRenderer, drawContext.getMatrices()).drawCentered(title, width / 2, 10);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+        TextHelper.get(textRenderer, context.getMatrices()).drawCentered(title, width / 2, 10);
     }
 
     private void onAddClicked(ButtonWidget widget) {

@@ -357,12 +357,12 @@ public class MapScreen extends MapScreenApi {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        if (super.mouseScrolled(mouseX, mouseY, amount)) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)) {
             return true;
         }
 
-        FullscreenMapEventHandler consumer = callEventReturnable((handler) -> handler.mouseScrolled(this, mouseX, mouseY, amount));
+        FullscreenMapEventHandler consumer = callEventReturnable((handler) -> handler.mouseScrolled(this, mouseX, mouseY, verticalAmount));
         if (consumer != null) {
             return true;
         }
@@ -373,9 +373,9 @@ public class MapScreen extends MapScreenApi {
         int mouseScaleY = (int) (mouseY * scale);
         int wDiv2 = window.getFramebufferWidth() >> 1;
         int hDiv2 = window.getFramebufferHeight() >> 1;
-        if (amount > 0) {
+        if (verticalAmount > 0) {
             zoomIn(mouseScaleX - wDiv2, mouseScaleY - hDiv2);
-        } else if (amount < 0) {
+        } else if (verticalAmount < 0) {
             zoomOut(mouseScaleX - wDiv2, mouseScaleY - hDiv2);
         }
         updateRenderView();
@@ -384,9 +384,16 @@ public class MapScreen extends MapScreenApi {
     }
 
     @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {}
+
+    public void renderOriginalBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderBackground(context, mouseX, mouseY, delta);
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         MatrixStack matrices = context.getMatrices();
-        renderBackground(context);
+        renderOriginalBackground(context, mouseX, mouseY, delta);
 
         if (map == null) {
             super.render(context, mouseX, mouseY, delta);

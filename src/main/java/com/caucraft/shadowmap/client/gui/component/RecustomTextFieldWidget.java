@@ -117,11 +117,11 @@ public class RecustomTextFieldWidget extends TextFieldWidget {
     }
 
     @Override
-    public void setCursor(int cursor) {
+    public void setCursor(int cursor, boolean shiftKeyPressed) {
         if (cursor > 0) {
-            super.setCursor(Math.max(0, cursor - 2));
+            super.setCursor(Math.max(0, cursor - 2), shiftKeyPressed);
         }
-        super.setCursor(cursor);
+        super.setCursor(cursor, shiftKeyPressed);
     }
 
     @Override

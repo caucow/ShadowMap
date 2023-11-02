@@ -110,11 +110,4 @@ public class ImportsScreen extends LessPoopScreen {
         x += importButton.getWidth() + 20;
         backButton.setPosition(x, y);
     }
-
-    @Override
-    public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-        renderBackground(drawContext);
-        super.render(drawContext, mouseX, mouseY, delta);
-        TextHelper.get(textRenderer, drawContext.getMatrices()).drawCentered(title, width / 2, 10);
-    }
 }

@@ -327,7 +327,7 @@ public class ShadowMap implements ClientModInitializer, MapApi {
         this.defaultRegistriesFuture = SaveLoading.load(
                 new SaveLoading.ServerConfig(
                         new SaveLoading.DataPacks(
-                                new ResourcePackManager(new VanillaDataPackProvider()),
+                                new ResourcePackManager(new VanillaDataPackProvider(client.getSymlinkFinder())),
                                 DataConfiguration.SAFE_MODE,
                                 false,
                                 true),

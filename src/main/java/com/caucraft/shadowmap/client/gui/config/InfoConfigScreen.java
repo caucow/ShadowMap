@@ -102,12 +102,6 @@ public class InfoConfigScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context);
-        super.render(context, mouseX, mouseY, delta);
-    }
-
-    @Override
     public void removed() {
         ShadowMap.getInstance().scheduleSaveConfig();
     }

@@ -373,14 +373,6 @@ public class EditWaypointScreen extends LessPoopScreen {
 
     }
 
-    @Override
-    public void tick() {
-        nameField.tick();
-        xField.tick();
-        yField.tick();
-        zField.tick();
-    }
-
     private void deleteClicked(ButtonWidget btn) {
         if (waypointId == null) {
             return;
@@ -547,12 +539,6 @@ public class EditWaypointScreen extends LessPoopScreen {
             title += ": " + waypoint.get().getName();
         }
         return title;
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float tickDelta) {
-        renderBackground(context);
-        super.render(context, mouseX, mouseY, tickDelta);
     }
 
     private static int getRandomColor() {

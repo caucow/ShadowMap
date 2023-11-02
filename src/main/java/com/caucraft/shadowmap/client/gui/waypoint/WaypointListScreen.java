@@ -97,12 +97,6 @@ public class WaypointListScreen extends LessPoopScreen {
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float tickDelta) {
-        renderBackground(context);
-        super.render(context, mouseX, mouseY, tickDelta);
-    }
-
     private void addWaypoint(boolean isGroup, boolean addToSelected) {
         Vector3d pos = new Vector3d();
         Entity camera = client.getCameraEntity();

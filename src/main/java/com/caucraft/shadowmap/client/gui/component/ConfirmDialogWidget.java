@@ -101,9 +101,9 @@ public class ConfirmDialogWidget extends FullscreenWidget {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         for (ButtonWidget widget : buttons) {
-            if (widget.mouseScrolled(mouseX, mouseY, amount)) {
+            if (widget.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)) {
                 return true;
             }
         }

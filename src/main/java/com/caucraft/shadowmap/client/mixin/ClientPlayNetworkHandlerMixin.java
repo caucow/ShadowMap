@@ -14,16 +14,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
-    @Shadow
-    @Final
-    private MinecraftClient client;
-
     @Inject(method = "onDeathMessage(Lnet/minecraft/network/packet/s2c/play/DeathMessageS2CPacket;)V",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/network/ClientPlayerEntity;showsDeathScreen()Z",
                     shift = At.Shift.BY, by = -2))
     private void injectOnDeathMessage(DeathMessageS2CPacket packet, CallbackInfo callback) {
-        MinecraftClient client = this.client;
+        MinecraftClient client = MinecraftClient.getInstance();
         ClientPlayerEntity player = client.player;
         ShadowMap.getInstance().onPlayerDeath(client, player);
     }

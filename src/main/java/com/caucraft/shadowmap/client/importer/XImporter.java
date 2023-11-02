@@ -437,7 +437,7 @@ public class XImporter {
         }
         if ((flags & PALETTE_BLOCK) != 0) {
             BlockState state;
-            NbtCompound blockStateNbt = NbtIo.read(context.dataIn);
+            NbtCompound blockStateNbt = NbtIo.readCompound(context.dataIn);
             if (context.versionMajor < 6) {
                 // TODO run datafixer before parse
             }
@@ -459,7 +459,7 @@ public class XImporter {
         }
         if ((layerFlags & LAYER_PALETTE_BLOCK) != 0) {
             BlockState layerState;
-            NbtCompound blockStateNbt = NbtIo.read(context.dataIn);
+            NbtCompound blockStateNbt = NbtIo.readCompound(context.dataIn);
             if (context.versionMajor < 6) {
                 // TODO run datafixer before parse
             }

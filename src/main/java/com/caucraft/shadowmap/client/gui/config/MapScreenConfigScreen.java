@@ -107,12 +107,6 @@ public class MapScreenConfigScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context);
-        super.render(context, mouseX, mouseY, delta);
-    }
-
-    @Override
     public void removed() {
         float zoomMax = config.maxZoom.get();
         float zoomMin = config.minZoom.get();

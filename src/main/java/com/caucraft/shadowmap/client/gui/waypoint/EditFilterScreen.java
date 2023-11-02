@@ -118,10 +118,4 @@ public class EditFilterScreen extends LessPoopScreen {
     private void cancelClicked(ButtonWidget btn) {
         client.setScreen(parentScreen);
     }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context);
-        super.render(context, mouseX, mouseY, delta);
-    }
 }

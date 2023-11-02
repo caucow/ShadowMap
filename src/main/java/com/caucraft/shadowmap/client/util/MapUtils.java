@@ -220,7 +220,7 @@ public abstract class MapUtils {
 
     public static NbtCompound readCompressedNbt(InputStream inputStream) throws IOException {
         try (DataInputStream dataIn = new DataInputStream(new GZIPInputStream(inputStream, 65536))) {
-            return NbtIo.read(dataIn, NbtTagSizeTracker.EMPTY);
+            return NbtIo.readCompound(dataIn);
         }
     }
 
