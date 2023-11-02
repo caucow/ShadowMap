@@ -30,6 +30,10 @@ run/
 gradle/
 build/
 
+# But keep the gradle wrapper properties
+!gradle/wrapper
+!gradle/wrapper/gradle-wrapper.properties
+
 # Local ignores
 debugs/
 

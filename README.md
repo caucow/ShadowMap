@@ -211,17 +211,17 @@ work later. What works now will work well later. What works well now will be ine
   ![(waypoint-management.gif)](readme-assets/waypoint-management.gif))
 - The **Auto-Position** option serves two functions: It positions the group point in the middle of a circle that
   contains all its contents (such a circle would touch the two or three outermost waypoints in the group), AND it
-  automatically resizes the filters, if present, using the "AF Buffer" (Auto-Filter Buffer Radius") next to each filter
+  automatically resizes the filters, if present, using the "AF Buffer" (Auto-Filter Buffer Radius) next to each filter
   button.
 - **A filter's radius IS NOT THE SAME as the buffer radius** for that filter. When a waypoint group is automatically
   repositioned its filters' radii are set to the size of the minimum circle containing all the group's waypoints PLUS
   the buffer radius. Currently, disabling Auto-Positioning also disables automatic filter sizing; these will likely be
   separate options in a future release.<br>
   ![(filter-radius-demo.png)](readme-assets/filter-radius-demo.png)
-- Groups can be drawn differently on the map depending on whether they are expanded or collapsed and whether they have
-  an Expansion Filter configured. With a filter, all four Draw Modes (None, Point, Filter, and Point-Filter) take on a
-  different appearance. **Without an Expansion Filter, the Filter and Point-Filter draw modes render the same as the
-  Point draw mode.**<br>
+- **Draw Modes make the group appear differently on the map depending** on whether they are expanded or collapsed and
+  whether they have an Expansion Filter configured. With a filter, all four Draw Modes (None, Point, Filter, and
+  Point-Filter) take on a different appearance. **Without an Expansion Filter, the Filter and Point-Filter draw modes
+  render the same as the Point draw mode.**<br>
   ![(group-draw-modes.png)](readme-assets/group-draw-modes.png)
 - By default, waypoints and groups do not have a Visibility Filter, and groups do not have an Expansion Filter. However,
   groups DO always allow you to configure their Filter Buffers. I am aware that the distinction between filter radius

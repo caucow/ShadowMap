@@ -15,6 +15,7 @@ import com.caucraft.shadowmap.client.map.MapWorldImpl;
 import com.caucraft.shadowmap.client.map.RegionContainerImpl;
 import com.caucraft.shadowmap.client.mixin.GameRendererAccess;
 import com.caucraft.shadowmap.client.util.TextHelper;
+import com.google.common.collect.Streams;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
@@ -38,6 +39,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler {
@@ -67,6 +69,7 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
     private final ArrayList<Waypoint> miniPointsCache;
     private final ArrayList<WaypointGroup> screenGroupsCache;
     private final ArrayList<Waypoint> screenPointsCache;
+    private final ArrayList<Waypoint> highlightedCache;
 
     public WaypointRenderer(ShadowMap shadowMap) {
         this.shadowMap = shadowMap;
@@ -77,35 +80,33 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         this.miniPointsCache = new ArrayList<>();
         this.screenGroupsCache = new ArrayList<>();
         this.screenPointsCache = new ArrayList<>();
-
+        this.highlightedCache = new ArrayList<>();
     }
 
     public void cacheWaypoints(MapWorldImpl world, double cameraX, double cameraY, double cameraZ) {
         WaypointConfig config = shadowMap.getConfig().waypointConfig;
-        ArrayList<WaypointGroup> groupsCache = miniGroupsCache;
-        ArrayList<Waypoint> pointsCache = this.miniPointsCache;
-        groupsCache.clear();
-        pointsCache.clear();
+        miniGroupsCache.clear();
+        miniPointsCache.clear();
+        screenGroupsCache.clear();
+        screenPointsCache.clear();
+        highlightedCache.clear();
         if (world == null) {
             cachedWorldKey = null;
-        } else {
-            this.cachedWorldKey = world.getWorldKey();
-            collectWaypoints(world.getWaypointManager(), cameraX, cameraY, cameraZ, false, false, groupsCache,
-                    pointsCache);
+            return;
         }
-        groupsCache = this.screenGroupsCache;
-        pointsCache = this.screenPointsCache;
-        groupsCache.clear();
-        pointsCache.clear();
-        if (world != null) {
-            if (config.ignoreVisibleFilterOnMapScreen.get() || config.ignoreExpandFilterOnMapScreen.get()) {
-                collectWaypoints(world.getWaypointManager(), cameraX, cameraY, cameraZ,
-                        config.ignoreVisibleFilterOnMapScreen.get(), config.ignoreExpandFilterOnMapScreen.get(),
-                        groupsCache, pointsCache);
-            } else {
-                groupsCache.addAll(miniGroupsCache);
-                pointsCache.addAll(miniPointsCache);
-            }
+        this.cachedWorldKey = world.getWorldKey();
+        collectWaypoints(world.getWaypointManager(), cameraX, cameraY, cameraZ, false, false, miniGroupsCache, miniPointsCache);
+        if (config.ignoreVisibleFilterOnMapScreen.get() || config.ignoreExpandFilterOnMapScreen.get()) {
+            collectWaypoints(world.getWaypointManager(), cameraX, cameraY, cameraZ,
+                    config.ignoreVisibleFilterOnMapScreen.get(), config.ignoreExpandFilterOnMapScreen.get(),
+                    screenGroupsCache, screenPointsCache);
+        } else {
+            screenGroupsCache.addAll(miniGroupsCache);
+            screenPointsCache.addAll(miniPointsCache);
+        }
+        world.getWaypointManager().getHighlightedWaypoints(highlightedCache);
+        for (Waypoint waypoint : highlightedCache) {
+            setCachedLabel(waypoint, cameraX, cameraY, cameraZ);
         }
     }
 
@@ -188,16 +189,20 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         }
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         ArrayList<WaypointGroup> groups;
+        ArrayList<Waypoint> highlighted;
         if (context.world.getWorldKey() == cachedWorldKey) {
             groups = context.mapType == MapRenderContext.MapType.FULLSCREEN ? screenGroupsCache : miniGroupsCache;
+            highlighted = highlightedCache;
         } else {
             groups = new ArrayList<>();
+            highlighted = new ArrayList<>();
             collectWaypoints(((MapWorldImpl) context.world).getWaypointManager(), context.centerX, 0, context.centerZ,
                     context.mapType == MapRenderContext.MapType.FULLSCREEN && config.ignoreVisibleFilterOnMapScreen.get(),
                     context.mapType == MapRenderContext.MapType.FULLSCREEN && config.ignoreExpandFilterOnMapScreen.get(),
                     groups, new ArrayList<>());
+            ((MapWorldImpl) context.world).getWaypointManager().getHighlightedWaypoints(highlighted);
         }
-        renderMapGroups(context, groups);
+        renderMapGroups(context, groups, highlighted);
     }
 
     @Override
@@ -212,30 +217,45 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         }
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         ArrayList<Waypoint> points;
+        ArrayList<Waypoint> highlighted;
         if (context.world.getWorldKey() == cachedWorldKey) {
             points = context.mapType == MapRenderContext.MapType.FULLSCREEN ? screenPointsCache : miniPointsCache;
+            highlighted = highlightedCache;
         } else {
             points = new ArrayList<>();
+            highlighted = new ArrayList<>();
             collectWaypoints(((MapWorldImpl) context.world).getWaypointManager(), context.centerX, 0, context.centerZ,
                     context.mapType == MapRenderContext.MapType.FULLSCREEN && config.ignoreVisibleFilterOnMapScreen.get(),
                     context.mapType == MapRenderContext.MapType.FULLSCREEN && config.ignoreExpandFilterOnMapScreen.get(),
                     new ArrayList<>(), points);
+            ((MapWorldImpl) context.world).getWaypointManager().getHighlightedWaypoints(highlighted);
         }
-        renderMapPoints(config, context, points);
+        renderMapPoints(config, context, points, highlighted);
     }
 
-    private void renderMapGroups(MapRenderContext context, List<WaypointGroup> groups) {
+    private void renderMapGroups(MapRenderContext context, List<WaypointGroup> groups, List<Waypoint> highlighted) {
         Tessellator tess = context.tessellator;
         BufferBuilder buffer = context.buffer;
         buffer.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
         for (WaypointGroup group : groups) {
             renderMapGroupFill(context, group);
         }
+        for (Waypoint point : highlighted) {
+            if (point instanceof WaypointGroup group) {
+                renderMapGroupFill(context, group);
+            }
+        }
         tess.draw();
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
         for (WaypointGroup group : groups) {
-            renderMapGroupOutline(context, group);
+            renderMapGroupOutline(context, group, false);
+        }
+        boolean highlight = ShadowMap.getLastTickTimeS() % 1000 < 500;
+        for (Waypoint point : highlighted) {
+            if (point instanceof WaypointGroup group) {
+                renderMapGroupOutline(context, group, highlight);
+            }
         }
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         tess.draw();
@@ -278,35 +298,32 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         }
     }
 
-    private void renderMapGroupOutline(MapRenderContext context, WaypointGroup group) {
+    private void renderMapGroupOutline(MapRenderContext context, WaypointGroup group, boolean highlight) {
         WaypointFilter filter = group.getExpandFilter();
         if (filter == null) {
             return;
         }
-        int rgb = group.getColorRGB();
-        int r = rgb >> 16 & 0xFF;
-        int g = rgb >> 8 & 0xFF;
-        int b = rgb & 0xFF;
+        final int gray = highlight ? 255 : 0;
         double x = group.pos.x;
         double z = group.pos.z;
         double radius = filter.getRadius();
         switch (filter.getShape()) {
             case CIRCLE: {
                 for (int i = 1; i < CIRCLE_POINTS; i++) {
-                    context.worldVertex(x + radius * COS_LOOKUP[i - 1], z + radius * SIN_LOOKUP[i - 1], 0).color(0, 0, 0, 255).next();
-                    context.worldVertex(x + radius * COS_LOOKUP[i], z + radius * SIN_LOOKUP[i], 0).color(0, 0, 0, 255).next();
+                    context.worldVertex(x + radius * COS_LOOKUP[i - 1], z + radius * SIN_LOOKUP[i - 1], 0).color(gray, gray, gray, 255).next();
+                    context.worldVertex(x + radius * COS_LOOKUP[i], z + radius * SIN_LOOKUP[i], 0).color(gray, gray, gray, 255).next();
                 }
                 break;
             }
             case SQUARE: {
-                context.worldVertex(x - radius, z - radius, 0).color(0, 0, 0, 255);
-                context.worldVertex(x - radius, z + radius, 0).color(0, 0, 0, 255);
-                context.worldVertex(x - radius, z + radius, 0).color(0, 0, 0, 255);
-                context.worldVertex(x + radius, z + radius, 0).color(0, 0, 0, 255);
-                context.worldVertex(x + radius, z + radius, 0).color(0, 0, 0, 255);
-                context.worldVertex(x + radius, z - radius, 0).color(0, 0, 0, 255);
-                context.worldVertex(x + radius, z - radius, 0).color(0, 0, 0, 255);
-                context.worldVertex(x - radius, z - radius, 0).color(0, 0, 0, 255);
+                context.worldVertex(x - radius, z - radius, 0).color(gray, gray, gray, 255);
+                context.worldVertex(x - radius, z + radius, 0).color(gray, gray, gray, 255);
+                context.worldVertex(x - radius, z + radius, 0).color(gray, gray, gray, 255);
+                context.worldVertex(x + radius, z + radius, 0).color(gray, gray, gray, 255);
+                context.worldVertex(x + radius, z + radius, 0).color(gray, gray, gray, 255);
+                context.worldVertex(x + radius, z - radius, 0).color(gray, gray, gray, 255);
+                context.worldVertex(x + radius, z - radius, 0).color(gray, gray, gray, 255);
+                context.worldVertex(x - radius, z - radius, 0).color(gray, gray, gray, 255);
                 break;
             }
             case OCTAGON: {
@@ -316,7 +333,7 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         }
     }
 
-    private void renderMapPoints(WaypointConfig config, MapRenderContext context, List<Waypoint> points) {
+    private void renderMapPoints(WaypointConfig config, MapRenderContext context, List<Waypoint> points, List<Waypoint> highlighted) {
         Tessellator tess = context.tessellator;
         BufferBuilder buffer = context.buffer;
         float scale = config.maxMapUiScale.get();
@@ -331,11 +348,22 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
 //        GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 
+        boolean highlight = ShadowMap.getLastTickTimeS() % 1000 < 500;
         if (context.mapType == MapRenderContext.MapType.FULLSCREEN) {
             Waypoint closest = null;
             double closestDistSq = Double.POSITIVE_INFINITY;
             for (Waypoint waypoint : points) {
                 renderMapWaypoint(config, context, textHelper, waypoint, false);
+                renderMapText(config, context, textHelper, waypoint);
+
+                double distSq = Vector2d.distanceSquared(waypoint.getPos().x, waypoint.getPos().z, context.mouseXWorld, context.mouseZWorld);
+                if (distSq < closestDistSq) {
+                    closest = waypoint;
+                    closestDistSq = distSq;
+                }
+            }
+            for (Waypoint waypoint : highlighted) {
+                renderMapWaypoint(config, context, textHelper, waypoint, highlight);
                 renderMapText(config, context, textHelper, waypoint);
 
                 double distSq = Vector2d.distanceSquared(waypoint.getPos().x, waypoint.getPos().z, context.mouseXWorld, context.mouseZWorld);
@@ -351,6 +379,10 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         } else {
             for (Waypoint waypoint : points) {
                 renderMapWaypoint(config, context, textHelper, waypoint, false);
+                renderMapText(config, context, textHelper, waypoint);
+            }
+            for (Waypoint waypoint : highlighted) {
+                renderMapWaypoint(config, context, textHelper, waypoint, highlight);
                 renderMapText(config, context, textHelper, waypoint);
             }
         }
@@ -381,6 +413,7 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         int textWidth = textHelper.renderer().getWidth(config.showDistanceOnMap.get() ? waypoint.cachedLabel : waypoint.getShortOrLongName()) + 2;
         int halfWidth = textWidth >> 1;
 
+        int edge = highlight ? 255 : 0;
         if (context.uiContains(x, y, threshold)) {
             int small = config.pointSize.get();
             int big = small + 1;
@@ -388,11 +421,10 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
             matrix.set(context.uiToScreen);
             matrix.translate(vec.x, vec.y);
             matrix.scale(scale);
-            int back = highlight ? 255 : 0;
-            context.vertex(matrix, -big, 0, 0).color(back, back, back, a).next();
-            context.vertex(matrix, 0, big, 0).color(back, back, back, a).next();
-            context.vertex(matrix, big, 0, 0).color(back, back, back, a).next();
-            context.vertex(matrix, 0, -big, 0).color(back, back, back, a).next();
+            context.vertex(matrix, -big, 0, 0).color(edge, edge, edge, a).next();
+            context.vertex(matrix, 0, big, 0).color(edge, edge, edge, a).next();
+            context.vertex(matrix, big, 0, 0).color(edge, edge, edge, a).next();
+            context.vertex(matrix, 0, -big, 0).color(edge, edge, edge, a).next();
             context.vertex(matrix, -small, 0, 0).color(r, g, b, a).next();
             context.vertex(matrix, 0, small, 0).color(r, g, b, a).next();
             context.vertex(matrix, small, 0, 0).color(r, g, b, a).next();
@@ -420,10 +452,10 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
             matrix.translate(vec.x, vec.y);
             matrix.scale(scale);
             matrix.rotate(angle);
-            context.vertex(matrix, leftRight + 1, wing + 1, 0).color(0, 0, 0, a).next();
-            context.vertex(matrix, 0, -tip - 2, 0).color(0, 0, 0, a).next();
-            context.vertex(matrix, 0, -tip - 2, 0).color(0, 0, 0, a).next();
-            context.vertex(matrix, -leftRight - 1, wing + 1, 0).color(0, 0, 0, a).next();
+            context.vertex(matrix, leftRight + 1, wing + 1, 0).color(edge, edge, edge, a).next();
+            context.vertex(matrix, 0, -tip - 2, 0).color(edge, edge, edge, a).next();
+            context.vertex(matrix, 0, -tip - 2, 0).color(edge, edge, edge, a).next();
+            context.vertex(matrix, -leftRight - 1, wing + 1, 0).color(edge, edge, edge, a).next();
             context.vertex(matrix, leftRight, wing, 0).color(r, g, b, a).next();
             context.vertex(matrix, 0, -tip, 0).color(r, g, b, a).next();
             context.vertex(matrix, 0, -tip, 0).color(r, g, b, a).next();
@@ -539,7 +571,10 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         TextHelper textHelper = TextHelper.get(textMatrix).immediate(false).shadow(true).color(0xC0FFFFFF);
         Vector3d pointVec = new Vector3d();
         int pointSize = config.pointSize.get() * uiScale;
-        for (Waypoint point : miniPointsCache) {
+        Iterator<Waypoint> pointIterator = Streams.concat(miniPointsCache.stream(), highlightedCache.stream()).iterator();
+        boolean highlight = shadowMap.getLastTickTime() % 1000 < 500;
+        while (pointIterator.hasNext()) {
+            Waypoint point = pointIterator.next();
             pointVec.set(point.getPos());
             modelViewProject.transformProject(pointVec);
             pointVec.round();
@@ -551,37 +586,45 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
             int g = rgb >> 8 & 0xFF;
             int b = rgb & 0xFF;
             double distSq = point.getPos().distanceSquared(camPos.x, camPos.y, camPos.z);
+            int pr = r;
+            int pg = g;
+            int pb = b;
+            if (highlight && point.isHighlighted()) {
+                pr = 255;
+                pg = 255;
+                pb = 255;
+            }
             if (distSq <= 256) {
-                int border = distSq <= 16 ? 255 : 0;
+                int border = distSq <= 16 || highlight && point.isHighlighted() ? 255 : 0;
                 buffer.vertex(pointVec.x, pointVec.y - pointSize - 1, 0).color(border, border, border, 255).next();
                 buffer.vertex(pointVec.x - pointSize - 1, pointVec.y, 0).color(border, border, border, 255).next();
                 buffer.vertex(pointVec.x, pointVec.y + pointSize + 1, 0).color(border, border, border, 255).next();
                 buffer.vertex(pointVec.x + pointSize + 1, pointVec.y, 0).color(border, border, border, 255).next();
-                buffer.vertex(pointVec.x, pointVec.y - pointSize, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x - pointSize, pointVec.y, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x, pointVec.y + pointSize, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x + pointSize, pointVec.y, 0).color(r, g, b, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y - pointSize, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x - pointSize, pointVec.y, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y + pointSize, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x + pointSize, pointVec.y, 0).color(pr, pg, pb, 255).next();
             } else {
                 int inset = MathHelper.ceil(distSq <= 16384 ? pointSize * 2.0F / 3.0F : pointSize * 1.0F / 3.0F);
-                buffer.vertex(pointVec.x, pointVec.y - pointSize, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x - pointSize, pointVec.y, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x - pointSize + inset, pointVec.y, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x, pointVec.y - pointSize + inset, 0).color(r, g, b, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y - pointSize, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x - pointSize, pointVec.y, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x - pointSize + inset, pointVec.y, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y - pointSize + inset, 0).color(pr, pg, pb, 255).next();
 
-                buffer.vertex(pointVec.x - pointSize, pointVec.y, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x, pointVec.y + pointSize, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x, pointVec.y + pointSize - inset, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x - pointSize + inset, pointVec.y, 0).color(r, g, b, 255).next();
+                buffer.vertex(pointVec.x - pointSize, pointVec.y, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y + pointSize, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y + pointSize - inset, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x - pointSize + inset, pointVec.y, 0).color(pr, pg, pb, 255).next();
 
-                buffer.vertex(pointVec.x, pointVec.y + pointSize, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x + pointSize, pointVec.y, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x + pointSize - inset, pointVec.y, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x, pointVec.y + pointSize - inset, 0).color(r, g, b, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y + pointSize, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x + pointSize, pointVec.y, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x + pointSize - inset, pointVec.y, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y + pointSize - inset, 0).color(pr, pg, pb, 255).next();
 
-                buffer.vertex(pointVec.x + pointSize, pointVec.y, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x, pointVec.y - pointSize, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x, pointVec.y - pointSize + inset, 0).color(r, g, b, 255).next();
-                buffer.vertex(pointVec.x + pointSize - inset, pointVec.y, 0).color(r, g, b, 255).next();
+                buffer.vertex(pointVec.x + pointSize, pointVec.y, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y - pointSize, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x, pointVec.y - pointSize + inset, 0).color(pr, pg, pb, 255).next();
+                buffer.vertex(pointVec.x + pointSize - inset, pointVec.y, 0).color(pr, pg, pb, 255).next();
             }
             String name = config.showDistanceInWorld.get() ? point.cachedLabel : point.getShortOrLongName();
             int halfWidth = ((textHelper.renderer().getWidth(name) >> 1) + 2) * uiScale;
@@ -646,17 +689,19 @@ public class WaypointRenderer implements MapDecorator, FullscreenMapEventHandler
         Waypoint closest = null;
         double closestDistSq = Double.POSITIVE_INFINITY;
 
-        ArrayList<Waypoint> points;
+        Iterator<Waypoint> pointIterator;
         if (world.getWorldKey() == cachedWorldKey) {
-            points = screenPointsCache;
+            pointIterator = Streams.concat(highlightedCache.stream(), screenPointsCache.stream()).iterator();
         } else {
-            points = new ArrayList<>();
+            ArrayList<Waypoint> points = new ArrayList<>();
             collectWaypoints(world.getWaypointManager(), screen.getCenterX(), 0, screen.getCenterZ(),
                     config.ignoreVisibleFilterOnMapScreen.get(), config.ignoreExpandFilterOnMapScreen.get(),
                     new ArrayList<>(), points);
+            pointIterator = Streams.concat(world.getWaypointManager().getHighlightedWaypoints().stream(), points.stream()).iterator();
         }
 
-        for (Waypoint waypoint : points) {
+        while (pointIterator.hasNext()) {
+            Waypoint waypoint = pointIterator.next();
             double distSq = Vector2d.distanceSquared(waypoint.getPos().x, waypoint.getPos().z, pos.x, pos.y);
             if (distSq < closestDistSq) {
                 closest = waypoint;

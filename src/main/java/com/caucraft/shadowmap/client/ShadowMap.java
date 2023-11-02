@@ -34,6 +34,7 @@ import com.google.gson.JsonParser;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.systems.VertexSorter;
 import com.mojang.brigadier.CommandDispatcher;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -53,6 +54,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.Entity;
@@ -137,6 +143,8 @@ public class ShadowMap implements ClientModInitializer, MapApi {
     private WaypointRenderer waypointRenderer;
     private IconAtlas iconAtlas;
 
+    private VertexConsumerProvider.Immediate bufferProvider;
+
     public static Logger getLogger() {
         return logger;
     }
@@ -207,6 +215,16 @@ public class ShadowMap implements ClientModInitializer, MapApi {
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndClientTick);
         HudRenderCallback.EVENT.register(this::onHudRender);
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(this::onPreDebugRender);
+
+        bufferProvider = new VertexConsumerProvider.Immediate(Tessellator.getInstance().getBuffer(), new Object2ObjectLinkedOpenHashMap<>()) {
+            @Override
+            public VertexConsumer getBuffer(RenderLayer renderLayer) {
+                if (!layerBuffers.containsKey(renderLayer)) {
+                    layerBuffers.put(renderLayer, new BufferBuilder(renderLayer.getExpectedBufferSize()));
+                }
+                return super.getBuffer(renderLayer);
+            }
+        };
 
         waypointRenderer = new WaypointRenderer(this);
         keybinds = new Keybinds(this);
@@ -515,6 +533,10 @@ public class ShadowMap implements ClientModInitializer, MapApi {
 
     public Registry<DimensionType> getDefaultDimensionRegistry() {
         return defaultDimensionRegistry;
+    }
+
+    public VertexConsumerProvider.Immediate getBufferProvider() {
+        return bufferProvider;
     }
 
     @Override
