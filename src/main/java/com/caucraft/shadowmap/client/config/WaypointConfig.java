@@ -31,7 +31,7 @@ public class WaypointConfig {
         this.showInWorld = section.getBoolean("showInWorld", true);
         this.shape = section.getEnum("shape", Shape.DIAMOND, Shape.class);
         this.pointSize = section.getInt("pointSize", 6);
-        this.maxMapUiScale = section.getInt("maxMapUiScale", 1);
+        this.maxMapUiScale = section.getInt("maxMapUiScale", 2);
         this.maxWorldUiScale = section.getInt("maxWorldUiScale", 2);
         this.hideCoords = section.getBoolean("hideCoords", false);
         this.defaultVisibleDistance = section.getInt("defaultVisibleDistance", 10_000);
