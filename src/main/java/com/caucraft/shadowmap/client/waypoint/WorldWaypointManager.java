@@ -3,6 +3,7 @@ package com.caucraft.shadowmap.client.waypoint;
 import com.caucraft.shadowmap.client.ShadowMap;
 import com.caucraft.shadowmap.client.config.WaypointConfig;
 import com.caucraft.shadowmap.client.util.data.DeletableLiveDataMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.nbt.NbtCompound;
 
 import java.io.IOException;
@@ -10,7 +11,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,6 +22,7 @@ public class WorldWaypointManager {
     private long modified;
     private DeletableLiveDataMap<Waypoint> allWaypoints; // todo rename to "allWaypoints"
     private Map<UUID, Waypoint> rootWaypoints;
+    private Map<UUID, Waypoint> highlighted;
 
     public WorldWaypointManager() {
         this.allWaypoints = new DeletableLiveDataMap<>((id, nbtRoot) -> {
@@ -40,7 +41,8 @@ public class WorldWaypointManager {
                 case GROUP -> new WaypointGroup(this, id);
             };
         });
-        this.rootWaypoints = new LinkedHashMap<>();
+        this.rootWaypoints = new Object2ObjectLinkedOpenHashMap<>();
+        this.highlighted = new Object2ObjectLinkedOpenHashMap<>();
     }
 
     /**
@@ -162,6 +164,7 @@ public class WorldWaypointManager {
                 }
             }
         }
+        highlighted.remove(waypoint.getId());
     }
 
     public void setModified(long modified) {
@@ -247,18 +250,11 @@ public class WorldWaypointManager {
     }
 
     /**
-     * @return an unmodifiable collection of all root waypoints
+     * @return a collection of all root waypoints
      */
     public Collection<Waypoint> getRootWaypoints() {
         List<Waypoint> waypoints = new ArrayList<>(rootWaypoints.size());
-        for (Map.Entry<UUID, Waypoint> entry : rootWaypoints.entrySet()) {
-            Waypoint root = entry.getValue();
-            Waypoint main = allWaypoints.get(entry.getKey());
-            if (root != main) {
-                throw new IllegalArgumentException("Waypoint in rootWaypoints does not match waypoint in allWaypoints: " + root + " != " + main);
-            }
-            waypoints.add(root);
-        }
+        getRootWaypoints(waypoints);
         return waypoints;
     }
 
@@ -275,6 +271,54 @@ public class WorldWaypointManager {
             }
             collection.add(root);
         }
+    }
+
+    /**
+     * @return a collection of all highlighted waypoints
+     */
+    public Collection<Waypoint> getHighlightedWaypoints() {
+        List<Waypoint> waypoints = new ArrayList<>(highlighted.size());
+        getHighlightedWaypoints(waypoints);
+        return waypoints;
+    }
+
+    /**
+     * Adds all highlighted waypoints to the provided collection.
+     * @param collection destination collection for highlighted waypoints.
+     */
+    public void getHighlightedWaypoints(Collection<Waypoint> collection) {
+        for (Map.Entry<UUID, Waypoint> entry : highlighted.entrySet()) {
+            Waypoint highlighted = entry.getValue();
+            Waypoint main = allWaypoints.get(entry.getKey());
+            if (highlighted != main) {
+                throw new IllegalArgumentException("Waypoint in highlightedWaypoints does not match waypoint in allWaypoints: " + highlighted + " != " + main);
+            }
+            collection.add(highlighted);
+        }
+    }
+
+    public void setHighlighted(Waypoint waypoint, boolean highlighted) {
+        if (allWaypoints.get(waypoint.getId()) != waypoint) {
+            return;
+        }
+        if (highlighted) {
+            this.highlighted.put(waypoint.getId(), waypoint);
+            waypoint.highlighted = true;
+        } else {
+            this.highlighted.remove(waypoint.getId());
+            waypoint.highlighted = false;
+        }
+    }
+
+    public boolean isHighlighted(Waypoint waypoint) {
+        return highlighted.get(waypoint.getId()) == waypoint;
+    }
+
+    public void clearHighlights() {
+        for (Waypoint waypoint : getHighlightedWaypoints()) {
+            waypoint.highlighted = false;
+        }
+        highlighted.clear();
     }
 
     public void loadNbt(NbtCompound root) throws IOException {

@@ -425,7 +425,7 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
             RenderSystem.enableDepthTest();
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
-            int indent = (depth * 8) + 2;
+            int indent = (depth * 8) + 17;
             renderColorSquareAndGroup(x, y, entryWidth, entryHeight, indent, hovered);
             renderName(matrices, x, y, entryWidth, entryHeight, indent);
             renderButtonIcons(matrices, x, y, entryWidth, hovered, mouseX);
@@ -482,6 +482,9 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
             int color = 0xfefefe;
             if (!waypoint.isVisible()) {
                 color >>>= 1;
+            }
+            if (waypoint.isHighlighted()) {
+                color &= 0xFFFF00;
             }
 //            if (waypoint.isTemporary()) {
 //                color &= 0xFF0000;
@@ -573,6 +576,11 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
                 int x1 = x + PointControl.VISIBLE.getXPos(this, entryWidth);
                 Sprite icon = PointControl.VISIBLE.getIcon(waypoint, atlas);
                 drawSprite(buffer, x1, y, 14, 14, icon, grayLevel);
+                if (waypoint.isHighlighted()) {
+                    x1 = x + PointControl.HIGHLIGHT.getXPos(this, entryWidth);
+                    icon = PointControl.HIGHLIGHT.getIcon(waypoint, atlas);
+                    drawSprite(buffer, x1, y, 14, 14, icon, grayLevel);
+                }
                 if (waypoint instanceof WaypointGroup group) {
                     x1 = x + GroupControl.EXPAND.getXPos(this, entryWidth);
                     icon = GroupControl.EXPAND.getIcon(group, atlas);
@@ -596,7 +604,14 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
     }
 
     private enum PointControl {
-        VISIBLE(0, true,
+        HIGHLIGHT(0, false,
+                (wp) -> wp.isHighlighted() ? Icons.HIGHLIGHTER_ON : Icons.HIGHLIGHTER_OFF,
+                (entry, wp) -> {
+                    WorldWaypointManager wpManager = wp.getWaypointManager();
+                    wpManager.setHighlighted(wp, !wp.isHighlighted());
+                },
+                (wp) -> "Waypoint " + (wp.getWaypointManager().isHighlighted(wp) ? "highlighted" : "not highlighted") + ".\nToggle a highlight on this waypoint, bypassing all filters and visibility settings and highlighting it on the map and in world."),
+        VISIBLE(15, true,
                 (wp) -> wp.isVisible() ? Icons.VISIBLE_ON : Icons.VISIBLE_OFF,
                 (entry, wp) -> wp.setVisible(!wp.isVisible()),
                 (wp) -> "Waypoint " + (wp.isVisible() ? "visible" : "hidden") + ".\nToggle this waypoint's visibility. If this is a group and hidden, contained waypoints and subgroups are also hidden."),
@@ -654,11 +669,11 @@ public class WaypointListWidget extends AlwaysSelectedEntryListWidget<WaypointLi
     }
 
     private enum GroupControl {
-        EXPAND(15, true,
+        EXPAND(30, true,
                 (wp) -> wp.isExpanded() ? Icons.EXPAND_ON : Icons.EXPAND_OFF,
                 (entry, wp) -> wp.setExpanded(!wp.isExpanded()),
                 (wp) -> "Group " + (wp.isExpanded() ? "expanded" : "collapsed") + ".\nToggle whether to show waypoints and subgroups in this group, or just this group."),
-        UI_EXPAND(28, false,
+        UI_EXPAND(43, false,
                 (wp) -> wp.isUiExpanded() ? Icons.MINUS : Icons.PLUS,
                 (entry, wp) -> {
                     wp.setUiExpanded(!wp.isUiExpanded());

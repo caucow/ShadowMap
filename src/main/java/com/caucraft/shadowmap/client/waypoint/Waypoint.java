@@ -30,7 +30,8 @@ public class Waypoint extends DeletableLiveObject {
     protected WaypointFilter visibleFilter;
     protected UUID parentId;
     protected transient WaypointGroup parent;
-    String cachedLabel;
+    transient String cachedLabel;
+    transient boolean highlighted;
 
     Waypoint(Waypoint inheritFrom) {
         super(inheritFrom);
@@ -66,6 +67,10 @@ public class Waypoint extends DeletableLiveObject {
         this.dir = new Vector2f();
         this.color = colorRGB;
         this.visible = true;
+    }
+
+    public WorldWaypointManager getWaypointManager() {
+        return waypointManager;
     }
 
     protected void setModified(long modified) {
@@ -146,10 +151,7 @@ public class Waypoint extends DeletableLiveObject {
      * @param pos component source vector
      */
     public void setPos(Vector3d pos) {
-        if (!this.pos.equals(pos)) {
-            setModified(ShadowMap.getLastTickTimeS());
-        }
-        this.pos.set(pos);
+        setPos(pos.x, pos.y, pos.z);
     }
 
     /**
@@ -159,10 +161,14 @@ public class Waypoint extends DeletableLiveObject {
      * @param z z axis component
      */
     public void setPos(double x, double y, double z) {
-        if (pos.x != x || pos.y != y || pos.z != z) {
+        boolean hMoved = pos.x != x || pos.z != z;
+        if (hMoved || pos.y != y) {
             setModified(ShadowMap.getLastTickTimeS());
         }
         this.pos.set(x, y, z);
+        if (hMoved && parent != null) {
+            parent.recalculatePosition();
+        }
     }
 
     /**
@@ -223,6 +229,10 @@ public class Waypoint extends DeletableLiveObject {
      */
     public boolean isVisible() {
         return visible;
+    }
+
+    public boolean isHighlighted() {
+        return highlighted;
     }
 
     public void setVisible(boolean visible) {

@@ -28,6 +28,7 @@ public class WaypointListScreen extends LessPoopScreen {
     private RecustomIconButtonWidget addWaypointToButton;
     private RecustomIconButtonWidget addGroupButton;
     private RecustomIconButtonWidget addGroupToButton;
+    private RecustomIconButtonWidget clearHighlightsButton;
     private ButtonWidget backButton;
 
     public WaypointListScreen(ShadowMap shadowMap, Screen previousScreen) {
@@ -49,6 +50,7 @@ public class WaypointListScreen extends LessPoopScreen {
         this.addWaypointToButton = addDrawableChild(new RecustomIconButtonWidget(0, 0, 125, 20, "Add Waypoint To...", (btn) -> addWaypoint(false, true)));
         this.addGroupButton = addDrawableChild(new RecustomIconButtonWidget(0, 0, 125, 20, "Add Group", (btn) -> addWaypoint(true, false)));
         this.addGroupToButton = addDrawableChild(new RecustomIconButtonWidget(0, 0, 125, 20, "Add Group To...", (btn) -> addWaypoint(true, true)));
+        this.clearHighlightsButton = addDrawableChild(new RecustomIconButtonWidget(0, 0, 100, 20, "Clear Highlights", (btn) -> waypointManager.clearHighlights()));
         this.backButton = addDrawableChild(ButtonWidget.builder(Text.of("Back"), (btn) -> client.setScreen(previousScreen)).dimensions(0, 0, 100, 20).build());
 
         waypointList.setSelectHandler((wpoint) -> updateButtonStates());
@@ -72,14 +74,15 @@ public class WaypointListScreen extends LessPoopScreen {
         waypointList.setSize(width, height);
 
         int midX = width / 2;
-        int x = midX - (addWaypointButton.getWidth() + addWaypointToButton.getWidth() + backButton.getWidth() + 32) / 2;
+        int x = midX - (addWaypointButton.getWidth() + addWaypointToButton.getWidth() + backButton.getWidth() + 24) / 2;
         int y = height - 60;
         addWaypointButton.setPos(x, y);
         addGroupButton.setPos(x, y + 24);
         x += addWaypointButton.getWidth() + 8;
         addWaypointToButton.setPos(x, y);
         addGroupToButton.setPos(x, y + 24);
-        x += addGroupButton.getWidth() + 24;
+        x += addGroupButton.getWidth() + 16;
+        clearHighlightsButton.setPos(x, y);
         backButton.setPos(x, y);
     }
 
